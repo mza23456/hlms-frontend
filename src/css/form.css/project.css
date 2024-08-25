@@ -1,0 +1,168 @@
+.project-form{
+    flex-wrap: wrap;
+    height: auto;
+    display: flex;
+    margin: 2rem 0;
+    & .project-name{
+        width: 48%;
+        margin-right: 1rem;
+    }
+    & .company-name{
+        width: 48%;
+    }
+    & .project-type{
+        width: 40%;
+        margin-right: 1rem;
+        margin-top: 1.5rem;
+
+    }
+    & .products{
+        width: 15%;
+        margin-right: 1rem;
+        margin-top: 1.5rem;
+
+
+    }
+    & .price{
+        width: 40%;
+        margin-top: 1.5rem;
+    }
+    .show-interest-info{
+        margin: 1rem 1rem 0 0;
+        padding-bottom: 1rem;
+
+        border-radius: 16px;
+        background-color: rgba(238, 238, 238, 1);
+        width: 40rem;
+        height: 7rem;
+        display: flex;
+        flex-direction: column;
+        & h5{
+            color: rgba(0, 45, 99, 1);
+            margin-bottom: 1rem;
+            margin-left: 1rem;
+            font-size: larger;
+            font-weight: 500;
+        }
+        & .box{
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-evenly;
+            & .interest{
+                width: 30%;
+                background-color: white;
+            }
+        }
+    }
+    
+    
+}
+.insure{
+    width: 40rem;
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+.show-insure-info{
+    margin: 1rem 0;
+        padding: 1rem;
+        border-radius: 16px;
+        background-color: rgba(238, 238, 238, 1);
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        & h5{
+            color: rgba(0, 45, 99, 1);
+            margin-bottom: 1rem;
+            margin-left: 1rem;
+            font-size: larger;
+            font-weight: 500;
+        }
+        & .insure-form{
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            & .insure-duartion{
+                min-width: 11rem;
+                margin-right: 1rem;
+                margin-bottom: 1rem;
+                background-color: white;
+
+            }
+            & .insure-cost{
+                min-width: 20rem;
+                margin-right: 1rem;
+                margin-bottom: 1rem;
+                background-color: white;
+            }
+            & .insure-interest{
+                min-width: 11rem;
+                margin-right: 1rem;
+                margin-bottom: 1rem;
+                background-color: white;
+            }
+            & .insure-total{
+                
+                min-width: 20rem;
+                margin-right: 1rem;
+                margin-bottom: 1rem;
+                background-color: white;
+            }
+        }
+}
+
+@media(max-width:1024px){
+    .project-form{
+        & .project-name{
+            width: 48%;
+        }
+        & .company-name{
+            width: 48%;
+        }
+        & .project-type{
+            width: 40%;
+        }
+        & .products{
+            width: 15%;
+            min-width: 7rem;
+        }
+        & .price{
+            width: 30%;
+            min-width: 10rem;
+        }
+    }
+    
+}
+@media(max-width:750px){
+    & .insure-form{
+        & div{
+            width: 20rem;
+        }
+    
+    }
+}
+
+@media(max-width:535px){
+    .project-form{
+        & .project-name{
+            width: 100%;
+            margin: unset;
+        }
+        & .company-name{
+            width: 45%;
+            margin-top: 1.5rem;
+            margin-right: 1rem;
+        }
+        & .project-type{
+            width: 45%;
+        }
+        & .products{
+            width: 15%;
+            min-width: 7rem;
+        }
+        & .price{
+            width: 45%;
+            min-width: 10rem;
+        }
+    }
+    
+}

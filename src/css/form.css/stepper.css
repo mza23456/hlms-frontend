@@ -1,0 +1,31 @@
+.form-stepper {
+    display: flex;
+    margin: 0 auto;
+    padding: 2rem 0;
+    margin-top: 5rem;
+}
+
+.containner {
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 75%;
+    & h3 {
+        margin-top: 1rem;
+        color: rgba(0, 86, 255, 1);
+        font-size:1.5rem;
+        font-weight:900;
+        border-bottom: 3px solid rgba(246, 139, 31, 1);
+        padding-bottom: 0.5rem;
+    }
+
+}
+p{
+    font-size: small;
+}
+
+.btn-css{
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0;
+}

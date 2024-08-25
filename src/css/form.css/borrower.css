@@ -1,0 +1,162 @@
+
+.mainBorrower-box{
+    margin-top: 1rem;
+    border-radius: 20px;
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.228); /* สำคัญ */
+    padding: 1rem 1.5rem;
+    background-color: white;
+    height: auto;
+    & .borrowerSection {
+        font-size: larger;
+        color: rgba(0, 45, 99, 1);
+    }
+}
+/* form style management */
+
+.mainBorrower-form,
+.secondBorrower-form,
+.thirdBorrower-form {
+    flex-wrap: wrap;
+    height: auto;
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    & .name {
+        width: 40%;
+    }
+    & .gender {
+        width: 6rem;
+    }
+    & .date {
+        width: 13rem;
+        margin-bottom: .5rem;
+    }
+    & .age{
+        width: 5rem;
+    }
+    & .loan-max{
+        width: 8rem;
+    }
+    & .career{
+        width: 19rem;
+    }
+}
+.secondBorrower-box{
+    margin-top: 1rem;
+    border-radius: 20px;
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.228); /* สำคัญ */
+    padding: 1rem 1.5rem;
+
+    & .secondBorrower-head{
+        display: flex;
+        justify-content: space-between;
+        & .borrowerSection{
+            font-size: larger;
+            color: rgba(0, 45, 99, 1);
+        }
+        & .secondBorrower-option {
+            & .add {
+                color:#333;
+            }
+            & .delete {
+                color:#333;
+            }
+        }
+    }
+}
+.thirdBorrower-box{
+    margin-top: 1rem;
+    border-radius: 20px;
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.228); /* สำคัญ */
+    padding: 1rem 1.5rem;
+    & .thirdBorrower-head{
+        display: flex;
+        justify-content: space-between;
+        & .borrowerSection{
+            font-size: larger;
+            color: rgba(0, 45, 99, 1);
+        }
+        & .thirdBorrower-option {
+            & .add {
+                color:#333;
+            }
+            & .delete {
+                color:#333;
+            }
+        }
+    }
+}
+/* tablet responsive display section */
+@media(max-width:1024px){
+    .containner{
+        & .mainBorrower-form,
+        .secondBorrower-form,
+        .thirdBorrower-form {
+            height: auto;
+            & .name {
+                width: 22.5rem;
+            }
+            & .gender {
+                width: 6rem;
+            }
+            & .date {
+                width: 13rem;
+            }
+            & .age{
+                width: 6rem;
+            }
+            & .loan-max{
+                width: 7rem;
+            }
+            & .career{
+                width: 65%;
+            }
+            & .income{
+                width: 48%;
+            }
+            & .expenses{
+                width: 48%;
+            }
+        }
+    }
+}
+
+/* mobile responsive display section */
+@media(max-width:535px) {
+    .containner{
+        & .mainBorrower-form,
+        .secondBorrower-form,
+        .thirdBorrower-form {
+            height: auto;
+            & .name {
+                width: 100%;
+                margin-right: unset;
+                order: -2;
+            }
+            & .gender {
+                width: 40%;
+            }
+            & .date {
+                width: 100%;
+                order: -1;
+            }
+            & .age{
+                width: 53%;
+            }
+            & .loan-max{
+                width: 7rem;
+            }
+            & .career{
+                width: 60%;
+                min-width: 7rem;
+            }
+            & .income{
+                width: 100%;
+            }
+            & .expenses{
+                width: 100%;
+            }
+        }
+    }
+    
+}

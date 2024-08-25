@@ -1,0 +1,65 @@
+
+
+
+.side-container{
+    /* background-color: aqua; */
+    width: 250px;
+    height: 100vh;
+    box-shadow: 0 0 100vh 300vh rgba(0, 0, 0, 0.228); /* สำคัญ */
+    position: absolute ;
+    background-color: rgb(255, 255, 255);
+    z-index: 50;
+
+
+    & .top-section{
+        /* background-color: blueviolet; */
+        height: 50px;
+        display: flex;
+        & .ham-icon{
+            /* background-color: aqua; */
+            width: 45px;
+            height: 35px;
+            margin: 8px 8px;
+
+        }
+        & img {
+            width: 75px;
+            margin: 8px 2px;
+            margin-left: 10px;
+
+        }
+    }
+    & .menu-section{
+        & .topmenu-section{
+            background-color: rgba(0, 45, 99, 1);
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            height: 40px;
+
+            & .home-icon{
+                color: aliceblue;
+                width: 30px;
+                height: 40px;
+            }
+            & h3{
+                color: aliceblue;
+                font-size: large;
+                text-align: center;
+                margin-top: 15px;
+                line-height: 30px;
+            }
+        }
+        & .menu{
+            /* background-color: blueviolet; */
+            margin-top: 0.5rem;
+            & .menu-selection{
+                /* background-color: brown; */
+                height: 100 auto;
+                border-bottom: 1px solid rgba(246, 139, 31, 1);
+            }
+        }
+        
+    }
+}
+

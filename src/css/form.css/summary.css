@@ -1,0 +1,116 @@
+.summary{
+    margin: 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    & .left-content{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        & .borrowers-container{
+            display: flex;
+            justify-content: space-between;
+            & .borrower-box{
+                width: 180px;
+                background-color: rgba(238, 238, 238, 1);
+                padding: .5rem;
+                border-radius: 12px;
+                & h4{
+                    font-size: 18px;
+                    color: blue;
+                }
+                & p {
+                    font-size: 16px;
+                    text-align: right;
+                    color: rgba(95, 95, 95, 1);
+                }
+            }
+        }
+        & .project-container{
+            background-color: rgba(238, 238, 238, 1);
+            margin-top: .8rem;
+            padding: 1rem .8rem;
+            border-radius: 12px;
+            height: 20rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            & .project-info{
+                display: flex;
+                & p{
+                    font-size: 18px;
+                    margin-right: .5rem;
+                }
+            }
+        }
+    }
+    & .right-content{
+        width: 49%;
+        & .summary-container{
+            background-color: rgba(0, 45, 99, 1);
+            padding: 1rem .8rem;
+            border-radius: 12px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            & .homeloan-info{
+                display: flex;
+                justify-content: space-between;
+                & p{
+                    font-size: 24px;
+                    font-weight:500;
+                    color: white;
+                }
+            }
+        }
+    }
+}
+
+.project-detail{
+    display: flex;
+    justify-content: space-between;
+}
+
+.cl-main{
+    color: rgba(0, 86, 255, 1);
+}
+.cl-second{
+    color: rgba(95, 95, 95, 1);
+}
+.underline{
+    border-bottom: 4px solid rgba(246, 139, 31, 1);
+}
+
+.main-borrower-box{
+    background-color: rgba(0, 86, 255, 1);
+    color: white;
+    padding: .5rem;
+    border-radius: 12px;
+    width: 180px;
+    & h4{
+        font-size: 18px;
+    }
+    & p {
+        font-size: 16px;
+        text-align: right;
+    }
+}
+
+@media(max-width:535px){
+    .summary{
+        background-color: aqua;
+        flex-direction: column;
+        & .left-content{
+            flex-direction: row;
+            width: 100%;
+            & .borrowers-container{
+                flex-direction: column;
+            }
+        }
+        & .right-content{
+            width: 100%;
+        }
+    }
+
+}
