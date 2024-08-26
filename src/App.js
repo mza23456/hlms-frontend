@@ -8,6 +8,8 @@ import StepperControl from './Components/Stepper-form/StepperControl';
 import Login from './Components/Login/Login';
 import Dashboard from './Components/Dashbord/Dashboard';
 import ClippedDrawer from './Components/Sidebar-nav/Nav';
+import Project from './Components/Project/project_lists';
+import ProjectDetails from './Components/Project/project_details';
 
 const theme = createTheme({
     typography: {
@@ -28,6 +30,8 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="dashboard2" element={<ClippedDrawer />} />
           <Route path="dashboard/homeloancal" element={<StepperControl />} />
+          <Route path="project-detail" element={<Project />} />
+          <Route path="project-details/:id" element={<ProjectDetails />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

@@ -5,73 +5,10 @@ import HomeIcon from '@mui/icons-material/Home';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { Slide } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { styled, useTheme } from '@mui/material/styles';
-import MuiAppBar from '@mui/material/AppBar';
-import List from '@mui/material/List';
-
 import IconButton from '@mui/material/IconButton';
-
-import ListItemButton from '@mui/material/ListItemButton';
-import ListSubheader from '@mui/material/ListSubheader';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
-
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import '../../css/์Navbar.css';
 import '../../css/sidebar.css';
-const drawerWidth = 240;
-
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
-        flexGrow: 1,
-        padding: theme.spacing(3),
-        transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        marginLeft: `-${drawerWidth}px`,
-        ...(open && {
-            transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-            marginLeft: 0,
-        }),
-    }),
-);
-
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-    transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: `${drawerWidth}px`,
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }),
-}));
-
-const DrawerHeader = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
-}));
 
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -102,13 +39,7 @@ function Navbar() {
         };
     }, []);
     
-    const Theme = useTheme();
-    const [open, setOpen] = React.useState(true);
 
-    const handleClick = () => {
-      setOpen(!open);
-    };
-    // ------------
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -175,47 +106,37 @@ function Navbar() {
                         </div>
                         <img className='user-img' src={imgSrc} alt='User Avatar' />
                     </div>
-                    <Slide direction="right" in={open} mountOnEnter unmountOnExit>
-                    <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          Nested List Items
-        </ListSubheader>
-      }
-    >
-      <ListItemButton>
-        <ListItemIcon>
-          <SendIcon />
-        </ListItemIcon>
-        <ListItemText primary="Sent mail" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Drafts" />
-      </ListItemButton>
-      <ListItemButton onClick={handleClick}>
-        <ListItemIcon>
-          <InboxIcon />
-        </ListItemIcon>
-        <ListItemText primary="Inbox" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Starred" />
-          </ListItemButton>
-        </List>
-      </Collapse>
-    </List>
+                    <Slide direction="right" in={isOpen} mountOnEnter unmountOnExit>
+                        <div className='side-container'>
+                            <div className='top-section'>
+                                <IconButton className='hov-btn'>
+                                    <MenuIcon className='ham-icon' onClick={closeMenu} />
+                                </IconButton>
+                                <img src='https://companieslogo.com/img/orig/TTB.BK-d7b21f4a.png?t=1655632706' alt='Logo' />
+                            </div>
+                            <div className='menu-section'>
+                                <div className='topmenu-section' onClick={goToHome}>
+                                    <HomeIcon className='home-icon' />
+                                    <h3>หน้าหลัก</h3>
+                                </div>
+                                <SimpleTreeView className='menu'>
+                                    <TreeItem className='menu-selection font-use' itemId="grid" label="จัดการสมัครสินเชื่อ" >
+                                        <TreeItem itemId="grid-community" label="เพิ่มข้อมูลลูกค้า" />
+                                        <TreeItem itemId="grid-pro" label="ตรวจสอบข้อมูลลูกค้า" />
+                                    </TreeItem>
+                                    <TreeItem className='menu-selection' itemId="pickers" label="จัดการใบสั่งงาน">
+                                        <TreeItem itemId="pickers-community" label="เพิ่มใบสั่งงาน" />
+                                        <TreeItem itemId="pickers-pro" label="ตรวจสอบพนักงานรับส่งเอกสาร" />
+                                        <TreeItem itemId="2" label="ตรวจสอบใบสั่งงาน" />
+                                    </TreeItem>
+                                    <TreeItem className='menu-selection' itemId='project' label="จัดการโครงการ">
+                                        <TreeItem itemId="project-1" label="เพิ่มข้อมูลลูกค้า" />
+                                        <TreeItem itemId="project-2" label="ตรวจสอบข้อมูลลูกค้า" />
+                                    </TreeItem>
+                                    <TreeItem className='menu-selection' itemId='cal' label="วิเคราะห์สินเชื่อบ้าน" onClick={goToCal}></TreeItem>
+                                </SimpleTreeView>
+                            </div>
+                        </div>
                     </Slide>
                 </nav>
                 <header className='-header'>ระบบบริหารจัดการข้อมูลการพิจารณาสินเชื่อบ้าน</header>

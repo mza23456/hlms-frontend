@@ -7,6 +7,47 @@ body{
     margin-top: 100px;
     padding: 0 9rem;
 }
+
+.img-customer-bg{
+    background-color: rgb(182, 217, 255);
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & img{
+        width: 1.7rem;
+    }
+}
+
+.img-document-bg{
+    background-color: rgb(209, 255, 211);
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & img{
+        width: 2.1rem;
+    }
+}
+
+.img-commission-bg{
+    background-color: rgb(250, 224, 255);
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & img{
+        width: 2.1rem;
+    }
+}
+
+
 .card-floor{
     /* background-color: aqua; */
     width: 100%;
