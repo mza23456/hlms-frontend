@@ -1,4 +1,10 @@
 
+.inner {
+    background-color: rgb(255, 255, 255);
+    padding: .8rem .5rem;
+    border-radius: 15px;
+    margin: 0 auto;
+}
 .mainBorrower-box{
     margin-top: 1rem;
     border-radius: 20px;
@@ -6,6 +12,7 @@
     padding: 1rem 1.5rem;
     background-color: white;
     height: auto;
+    position: relative;
     & .borrowerSection {
         font-size: larger;
         color: rgba(0, 45, 99, 1);
@@ -147,7 +154,7 @@
                 width: 7rem;
             }
             & .career{
-                width: 60%;
+                width: 58%;
                 min-width: 7rem;
             }
             & .income{

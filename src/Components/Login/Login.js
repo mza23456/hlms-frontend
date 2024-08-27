@@ -32,35 +32,43 @@ function Login() {
         body: JSON.stringify(inputs)
       });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const result = await response.json();
-
-      if (result.accessToken) {
-        localStorage.setItem('user', JSON.stringify({
-          username: result.username,
-          role: result.role,
-          img: result.img
-        }));
-        
-        await MySwal.fire({
-          html: 'เข้าสู่ระบบสำเร็จ',
-          icon: "success",
-          timer: 1500,
-          timerProgressBar: true,
-        });
-
-        localStorage.setItem("token", result.accessToken);
-        navigate("/dashboard");
-      } else {
+      if (response.status === 401) {
+        // Unauthorized error, wrong username or password
         await MySwal.fire({
           html: 'บัญชีผู้ใช้หรือรหัสผ่านไม่ถูกต้อง',
           icon: "error",
           timer: 1500,
           timerProgressBar: true,
         });
+      } else if (!response.ok) {
+        throw new Error('Network response was not ok');
+      } else {
+        const result = await response.json();
+
+        if (result.accessToken) {
+          localStorage.setItem('user', JSON.stringify({
+            username: result.username,
+            role: result.role,
+            img: result.img
+          }));
+          
+          await MySwal.fire({
+            html: 'เข้าสู่ระบบสำเร็จ',
+            icon: "success",
+            timer: 1500,
+            timerProgressBar: true,
+          });
+
+          localStorage.setItem("token", result.accessToken);
+          navigate("/dashboard");
+        } else {
+          await MySwal.fire({
+            html: 'บัญชีผู้ใช้หรือรหัสผ่านไม่ถูกต้อง',
+            icon: "error",
+            timer: 1500,
+            timerProgressBar: true,
+          });
+        }
       }
     } catch (error) {
       setError(error.message);

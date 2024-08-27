@@ -5,6 +5,9 @@ import { multiStepContex } from '../../stepContex'
 
 function ThirdStep() {
     const { setStep, formData, setFormData } = useContext(multiStepContex);
+    const formatCurrency = (amount) => {
+        return amount.toLocaleString();
+    };
     return (
         
         <div className='containner'>
@@ -48,15 +51,15 @@ function ThirdStep() {
                             </div>
                             <div className='project-info'>
                                 <p className='cl-main'>รายรับรวม: </p>
-                                <p className='cl-second'>40,000 บาท</p>
+                                <p className='cl-second'>{formatCurrency(formData.totalIncome)} บาท</p>
                             </div>
                             <div className='project-info'>
                                 <p className='cl-main'>รายจ่ายรวม: </p>
-                                <p className='cl-second'>18,000 บาท</p>
+                                <p className='cl-second'>{formatCurrency(formData.totalExpenses)} บาท</p>
                             </div>
                             <div className='project-info'>
                                 <p className='cl-main'>กู้ได้สูงสุด: </p>
-                                <p className='cl-second'>35ปี</p>
+                                <p className='cl-second'>{formData.maxLoanTerm} ปี</p>
                             </div>
                         </div>
                     </section>
@@ -76,7 +79,7 @@ function ThirdStep() {
                             </div>
                             <div className='homeloan-info'>
                                 <p>อัตราหนี้สินต่อรายได้(DTI): </p>
-                                <p>40 %</p>
+                                <p>{formData.dti} %</p>
                             </div>
                             <div className='homeloan-info'>
                                 <p>เปอร์เซ็นต์อนุมัติ: </p>

@@ -1,0 +1,134 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 7rem 3rem; /* Increase top padding */
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: rgba(0, 45, 99, 1);
+  font-size: 24px;
+  /* margin-top: 80px; Adjust top margin */
+  margin-bottom: 5px;
+}
+
+p {
+  color: rgba(0, 45, 99, 1);
+  /* margin-top: 10px; Adjust top margin */
+  margin-bottom: 20px;
+}
+
+.search-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.select-box {
+  flex: 1;
+}
+
+select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 100%;
+  font-size: 16px;
+}
+
+.search-button, .reset-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.search-button {
+  background-color: #337ab7;
+  color: white;
+  margin-left: 10px;
+}
+
+.reset-button {
+  background-color: #b7b7b7;
+  color: white;
+}
+
+.project-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+
+.project-table th, .project-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  box-shadow: 0 0 1px .25px rgba(166, 166, 166, 0.228);
+
+}
+
+.project-table th {
+  background-color: #f7f7f7;
+}
+
+.project-table tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.project-table tr:nth-child(odd) {
+  background-color: #e6f7ff;
+}  
+
+.icon-container {
+  display: inline-block;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  padding: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.search-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.select-box {
+  flex: 1;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 2;
+}
+
+.search-input {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-button, .reset-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-button {
+  background-color: #F68B1F;
+  color: white;
+}
+
+.reset-button {
+  background-color: #ccc;
+} 

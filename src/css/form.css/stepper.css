@@ -3,6 +3,8 @@
     margin: 0 auto;
     padding: 2rem 0;
     margin-top: 5rem;
+    background-color: rgb(255, 255, 255);
+
 }
 
 .containner {
@@ -10,6 +12,7 @@
     align-items: center;
     justify-content: center;
     width: 75%;
+
     & h3 {
         margin-top: 1rem;
         color: rgba(0, 86, 255, 1);
