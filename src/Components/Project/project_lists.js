@@ -108,7 +108,7 @@ const Project = () => {
           {filteredProjects.map((project, index) => (
             <tr key={project.projectId}>
               <td>{index + 1}</td>
-              <td>{project.officer?.firstName}</td>
+              <td>{project.officer?.firstName} {project.officer?.lastName}</td>
               <td>{project.owner}</td>
               <td>{project.name}</td>
               <td>{project.type}</td>
@@ -116,21 +116,21 @@ const Project = () => {
                 <div className="icon-container">
                   <LuPencilLine
                     color="#015CCA"
-                    size="40px"
+                    size="35px"
                     style={{
                       backgroundColor: '#69AFFD',
                       borderRadius: '10px',
                       padding: '5px',
                       cursor: 'pointer',
-                      marginRight: '10px', // Add margin to the right
+                      marginRight: '5px', // Add margin to the right
                     }}
                     onClick={() => handleEditClick(project.projectId)}
                   />
                   <LuTrash2
-                    color="#FF8000"
-                    size="40px"
+                    color="#FF1919"
+                    size="35px"
                     style={{
-                      backgroundColor: '#FFDDBA',
+                      backgroundColor: '#FFA6A6',
                       borderRadius: '10px',
                       padding: '5px',
                       cursor: 'pointer',

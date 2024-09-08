@@ -19,17 +19,17 @@
 }
 
 .project-table thead {
-  background-color: #005ec7;
+  background-color: #FF990C;
   color: #ffffff;
   letter-spacing: 0.05em;
 }
 
 .project-table thead th:first-child {
-  border-top-left-radius: 10px; /* มุมซ้ายบน */
+  border-top-left-radius: 20px; 
 }
 
 .project-table thead th:last-child {
-  border-top-right-radius: 10px; /* มุมขวาบน */
+  border-top-right-radius: 20px; 
 }
 
 /* กำหนดความสูงขั้นต่ำให้กับแถวของตาราง */
