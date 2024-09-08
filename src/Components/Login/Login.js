@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import "../../css/Login.css/Login.css"; // Make sure this path is correct
@@ -15,6 +19,7 @@ function Login() {
   const [inputs, setInputs] = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -84,6 +89,9 @@ function Login() {
     }
   };
 
+  const handleClickShowPassword = () => setShowPassword(prev => !prev);
+  const handleMouseDownPassword = (event) => event.preventDefault();
+
   return (
     <header>
       <img src={bg} className="Login-bg" alt="Background" />
@@ -103,18 +111,31 @@ function Login() {
               variant="outlined"
               value={inputs.username}
               onChange={handleChange}
-              autoFocus
             />
           </div>
           <div className="form-group" id="textbox-password">
             <TextField
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="inputPassword"
               className="form-control"
               label="รหัสผ่าน"
               name="password"
               value={inputs.password}
               onChange={handleChange}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
             />
           </div>
           <div id="sub-btn">

@@ -89,7 +89,7 @@ const Dashboard = () => {
                     <img src={person}></img>
                   </div>
                   <div>
-                    <h2>{projectCount}</h2>
+                    <h2>9</h2>
                     <p>ลูกค้าที่สมัคร</p>
                   </div>
                 </div>
@@ -100,7 +100,7 @@ const Dashboard = () => {
                     <img src={document}></img>
                   </div>
                   <div>
-                    <h2>{projectCount}</h2>
+                    <h2>3</h2>
                     <p>ใบสั่งงาน</p>
                   </div>
                 </div>
@@ -111,7 +111,7 @@ const Dashboard = () => {
                     <img src={commission}></img>
                   </div>
                   <div>
-                    <h2>{projectCount}</h2>
+                    <h2>15</h2>
                     <p>คอมมิชชัน</p>
                   </div>
                 </div>

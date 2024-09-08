@@ -13,6 +13,29 @@ const calculateAge = (birthDate) => {
     const currentYear = new Date().getFullYear();
     return currentYear - birthYear;
 };
+const calculateMaxLoanTerm = (birthDate) => {
+    if (!birthDate) return ''; // ตรวจสอบค่า birthDate ว่ามีอยู่หรือไม่
+
+    const age = calculateAge(birthDate);
+    const maxLoanTermBasedOnAge = 65 - age; // คำนวณระยะเวลากู้ตามอายุ
+
+    // จำกัดระยะเวลากู้สูงสุดไม่เกิน 35 ปี
+    const maxLoanTerm = maxLoanTermBasedOnAge > 35 ? 35 : maxLoanTermBasedOnAge;
+
+    // ตรวจสอบว่าค่ากู้สูงสุดเป็น 0 หรือลบ
+    if (maxLoanTerm <= 0) {
+        return 'ไม่สามารถกู้ได้';
+    }
+    return maxLoanTerm;
+};
+const calculateDTI = (totalIncome, totalExpenses) => {
+    if (!totalIncome || totalIncome <= 0) {
+        return 'ไม่สามารถคำนวณ DTI ได้'; // ป้องกันการหารด้วยศูนย์หรือตัวเลขติดลบ
+    }
+
+    const dti = (totalExpenses / totalIncome) *100;
+    return dti.toFixed(1); // ปัดเศษทศนิยม 2 ตำแหน่ง
+};
 
 // setFormatNumber function
 const NumericFormatCustom = React.forwardRef(
@@ -78,10 +101,18 @@ function FirstStep() {
 
     useEffect(() => {
         if (mainBirth) {
-            setFormData({...formData, "mainAge": calculateAge(mainBirth)});
+            setFormData({ ...formData, "mainAge": calculateAge(mainBirth) });
         }
     }, [mainBirth, setFormData, formData]);
-
+    useEffect(() => {
+        if (formData.mainBirth) {
+            const maxLoanTerm = calculateMaxLoanTerm(formData.mainBirth);
+            setFormData((prevData) => ({
+                ...prevData,
+                maxLoanTerm: maxLoanTerm,
+            }));
+        }
+    }, [formData.mainBirth, setFormData]);
     // Validation function
     const validate = () => {
         let tempErrors = {};
@@ -99,6 +130,22 @@ function FirstStep() {
     const handleInputChange = (field, value) => {
         setFormData({ ...formData, [field]: value });
         setErrors({ ...errors, [field]: "" });
+
+        const mainIncome = parseFloat(formData.mainIncome || 0);
+    const mainExpenses = parseFloat(formData.mainExpenses || 0);
+    const secondIncome = parseFloat(formData.secondIncome || 0);
+    const secondExpenses = parseFloat(formData.secondExpenses || 0);
+    const thirdIncome = parseFloat(formData.thirdIncome || 0);
+    const thirdExpenses = parseFloat(formData.thirdExpenses || 0);
+
+    // คำนวณรายรับและรายจ่ายรวม
+    const totalIncome = mainIncome + secondIncome + thirdIncome;
+    const totalExpenses = mainExpenses + secondExpenses + thirdExpenses;
+
+    // คำนวณ DTI ใหม่
+    const newDti = calculateDTI(totalIncome, totalExpenses);
+    setFormData((prevData) => ({ ...prevData,totalIncome, 
+        totalExpenses, dti: newDti }));
     };
 
     // Handle submit
@@ -113,201 +160,117 @@ function FirstStep() {
 
     return (
         <div className="containner">
-            <h3>ข้อมูลลูกค้า</h3>
-            <div className="mainBorrower-box">
-                <p className="borrowerSection">ผู้กู้หลัก</p>
-                <div className="mainBorrower-form">
-                    <div className="name">
-                        <TextField
-                            label="ชื่อ-นามสกุล"
-                            style={{ width: "100%" }}
-                            value={formData['mainName']}
-                            onChange={(e) => handleInputChange("mainName", e.target.value)}
-                            error={!!errors.mainName}
-                            helperText={errors.mainName}
-                        />
-                    </div>
-                    <div className="gender">
-                        <FormControl style={{ width: "100%" }} error={!!errors.mainGender}>
-                            <InputLabel id="demo-simple-select-label">เพศ</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                label="เพศ"
+            <div className="inner">
+                <h3>ข้อมูลลูกค้า</h3>
+                <div className="mainBorrower-box">
+                    <p className="borrowerSection">ผู้กู้หลัก</p>
+                    <div className="mainBorrower-form">
+                        <div className="name">
+                            <TextField
+                                label="ชื่อ-นามสกุล"
                                 style={{ width: "100%" }}
-                                value={formData['mainGender']}
-                                onChange={(e) => handleInputChange("mainGender", e.target.value)}
-                            >
-                                <MenuItem value={"ชาย"}>ชาย</MenuItem>
-                                <MenuItem value={"หญิง"}>หญิง</MenuItem>
-                            </Select>
-                            {errors.mainGender && <p style={{ color: 'red' }}>{errors.mainGender}</p>}
-                        </FormControl>
-                    </div>
-                    <div className="date">
-                        <CommonlyUsedComponents
-                            style={{ width: "100%" }}
-                            value={formData['mainBirth']}
-                            onChange={(date) => handleInputChange("mainBirth", date)}
-                            error={!!errors.mainBirth}
-                        />
-                        {errors.mainBirth && <p style={{ color: 'red' }}>{errors.mainBirth}</p>}
-                    </div>
-                    <div className="age">
-                        <TextField label="อายุ(ปี)" style={{ width: "100%" }} value={formData['mainAge']} readOnly />
-                    </div>
-                    <div className="loan-max">
-                        <TextField label="กู้ได้สูงสุด(ปี)" />
-                    </div>
-                    <div className="career">
-                        <FormControl style={{ width: "100%" }} error={!!errors.mainCareer}>
-                            <InputLabel id="demo-simple-select-label2">อาชีพ</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label2"
-                                id="career-select"
+                                value={formData['mainName']}
+                                onChange={(e) => handleInputChange("mainName", e.target.value)}
+                                error={!!errors.mainName}
+                                helperText={errors.mainName}
+                            />
+                        </div>
+                        <div className="gender">
+                            <FormControl style={{ width: "100%" }} error={!!errors.mainGender}>
+                                <InputLabel id="demo-simple-select-label">เพศ</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    label="เพศ"
+                                    style={{ width: "100%" }}
+                                    value={formData['mainGender']}
+                                    onChange={(e) => handleInputChange("mainGender", e.target.value)}
+                                >
+                                    <MenuItem value={"male"}>ชาย</MenuItem>
+                                    <MenuItem value={"female"}>หญิง</MenuItem>
+                                </Select>
+                                {errors.mainGender && <p style={{ color: 'red' }}>{errors.mainGender}</p>}
+                            </FormControl>
+                        </div>
+                        <div className="date">
+                            <CommonlyUsedComponents
                                 style={{ width: "100%" }}
+                                value={formData['mainBirth']}
+                                onChange={(date) => handleInputChange("mainBirth", date)}
+                                error={!!errors.mainBirth}
+                            />
+                            {errors.mainBirth && <p style={{ color: 'red' }}>{errors.mainBirth}</p>}
+                        </div>
+                        <div className="age">
+                            <TextField label="อายุ(ปี)" style={{ width: "100%" }} value={formData['mainAge'] || ''} readOnly />
+                        </div>
+                        <div className="loan-max">
+                            <TextField label="กู้ได้สูงสุด(ปี)" value={calculateMaxLoanTerm(formData['mainBirth']) || ''} />
+                        </div>
+                        <div className="career">
+                            <TextField
                                 label="อาชีพ"
+                                style={{ width: "100%" }}
                                 value={formData['mainCareer']}
                                 onChange={(e) => handleInputChange("mainCareer", e.target.value)}
-                            >
-                                <MenuItem value={"ชาย"}>ชาย</MenuItem>
-                                <MenuItem value={"หญิง"}>หญิง</MenuItem>
-                            </Select>
-                            {errors.mainCareer && <p style={{ color: 'red' }}>{errors.mainCareer}</p>}
-                        </FormControl>
-                    </div>
-                    <div className="income">
-                        <TextField
-                            label="รายรับรวม"
-                            style={{ width: "100%" }}
-                            value={formData['mainIncome']}
-                            onChange={(e) => handleInputChange("mainIncome", e.target.value)}
-                            InputProps={{
-                                inputComponent: NumericFormatCustom,
-                            }}
-                            error={!!errors.mainIncome}
-                            helperText={errors.mainIncome}
-                        />
-                    </div>
-                    <div className="expenses">
-                        <TextField
-                            label="รายจ่ายรวม"
-                            style={{ width: "100%" }}
-                            value={formData['mainExpenses']}
-                            onChange={(e) => handleInputChange("mainExpenses", e.target.value)}
-                            InputProps={{
-                                inputComponent: NumericFormatCustom,
-                            }}
-                            error={!!errors.mainExpenses}
-                            helperText={errors.mainExpenses}
-                        />
-                    </div>
-                </div>
-            </div>
-            <div className="moreBorrower">
-                <div className="secondBorrower-box">
-                    <div className="secondBorrower-head">
-                        <p className="borrowerSection">ผู้กู้ร่วมคนที่ 1</p>
-                        <div className="secondBorrower-option">
-                            {secondBorrowerIcon ? (
-                                <RemoveIcon
-                                    className="delete"
-                                    onClick={() =>
-                                        handleForm(toggleSecondBorrower, toggleThirdBorrower)
-                                    }
-                                />
-                            ) : (
-                                <AddIcon
-                                    className="add"
-                                    onClick={() =>
-                                        handleForm(toggleSecondBorrower, toggleThirdBorrower)
-                                    }
-                                />
-                            )}
+                                error={!!errors.mainCareer}
+                                helperText={errors.mainCareer}
+                            />
+                        </div>
+                        <div className="income">
+                            <TextField
+                                label="รายรับรวม"
+                                style={{ width: "100%" }}
+                                value={formData['mainIncome']}
+                                onChange={(e) => handleInputChange("mainIncome", e.target.value)}
+                                InputProps={{
+                                    inputComponent: NumericFormatCustom,
+                                }}
+                                error={!!errors.mainIncome}
+                                helperText={errors.mainIncome}
+                            />
+                        </div>
+                        <div className="expenses">
+                            <TextField
+                                label="รายจ่ายรวม"
+                                style={{ width: "100%" }}
+                                value={formData['mainExpenses']}
+                                onChange={(e) => handleInputChange("mainExpenses", e.target.value)}
+                                InputProps={{
+                                    inputComponent: NumericFormatCustom,
+                                }}
+                                error={!!errors.mainExpenses}
+                                helperText={errors.mainExpenses}
+                            />
                         </div>
                     </div>
-                    <Collapse in={showSecondBorrower}>
-                        <div className="secondBorrower-form">
-                            <div className="name">
-                                <TextField label="ชื่อ-นามสกุล" style={{ width: "100%" }} value={formData['secondName']} onChange={(e) => handleInputChange("secondName", e.target.value)} />
-                            </div>
-                            <div className="gender">
-                                <FormControl style={{ width: "100%" }}>
-                                    <InputLabel id="demo-simple-select-label">เพศ</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        label="เพศ"
-                                        style={{ width: "100%" }}
-                                        value={formData['secondGender']}
-                                        onChange={(e) => handleInputChange("secondGender", e.target.value)}
-                                    >
-                                        <MenuItem value={"ชาย"}>ชาย</MenuItem>
-                                        <MenuItem value={"หญิง"}>หญิง</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </div>
-                            <div className="date">
-                                <CommonlyUsedComponents value={formData['secondBirth']} onChange={(date) => handleInputChange("secondBirth", date)} />
-                            </div>
-                            <div className="age">
-                                <TextField label="อายุ(ปี)" style={{ width: "100%" }} />
-                            </div>
-                            <div className="loan-max">
-                                <TextField label="กู้ได้สูงสุด(ปี)" />
-                            </div>
-                            <div className="career">
-                                <FormControl style={{ width: "100%" }}>
-                                    <InputLabel id="demo-simple-select-label2">อาชีพ</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label2"
-                                        id="career-select"
-                                        style={{ width: "100%" }}
-                                        label="อาชีพ"
-                                        value={formData['secondCareer']} onChange={(e) => handleInputChange("secondCareer", e.target.value)}
-
-                                    >
-                                        <MenuItem value={"ชาย"}>ชาย</MenuItem>
-                                        <MenuItem value={"gay"}>gay</MenuItem>
-                                        <MenuItem value={"หญิง"}>หญิง</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </div>
-                            <div className="income">
-                                <TextField label="รายรับรวม" value={formData['secondIncome']} onChange={(e) => handleInputChange("secondIncome", e.target.value)} style={{ width: "100%" }}
-                                    InputProps={{
-                                        inputComponent: NumericFormatCustom,
-                                    }}
-                                />
-                            </div>
-                            <div className="expenses">
-                                <TextField label="รายจ่ายรวม" style={{ width: "100%" }} value={formData['secondExpenses']} onChange={(e) => handleInputChange("secondExpenses", e.target.value)}
-                                    InputProps={{
-                                        inputComponent: NumericFormatCustom,
-                                    }} />
-                            </div>
-                        </div>
-                    </Collapse>
                 </div>
-                <Collapse in={showThirdBorrower}>
-                    <div className="thirdBorrower-box">
-                        <div className="thirdBorrower-head">
-                            <p className="borrowerSection">ผู้กู้ร่วมคนที่ 2</p>
-                            <div className="thirdBorrower-option">
-                                {thirdBorrowerIcon ? (
+                <div className="moreBorrower">
+                    <div className="secondBorrower-box">
+                        <div className="secondBorrower-head">
+                            <p className="borrowerSection">ผู้กู้ร่วมคนที่ 1</p>
+                            <div className="secondBorrower-option">
+                                {secondBorrowerIcon ? (
                                     <RemoveIcon
                                         className="delete"
-                                        onClick={toggleThirdBorrowerForm}
+                                        onClick={() =>
+                                            handleForm(toggleSecondBorrower, toggleThirdBorrower)
+                                        }
                                     />
                                 ) : (
-                                    <AddIcon className="add" onClick={toggleThirdBorrowerForm} />
+                                    <AddIcon
+                                        className="add"
+                                        onClick={() =>
+                                            handleForm(toggleSecondBorrower, toggleThirdBorrower)
+                                        }
+                                    />
                                 )}
                             </div>
                         </div>
-                        <Collapse in={showThirdBorrowerForm}>
-                            <div className="thirdBorrower-form">
+                        <Collapse in={showSecondBorrower}>
+                            <div className="secondBorrower-form">
                                 <div className="name">
-                                    <TextField label="ชื่อ-นามสกุล" style={{ width: "100%" }} value={formData['thirdName']} onChange={(e) => handleInputChange("thirdName", e.target.value)} />
+                                    <TextField label="ชื่อ-นามสกุล" style={{ width: "100%" }} value={formData['secondName']} onChange={(e) => handleInputChange("secondName", e.target.value)} />
                                 </div>
                                 <div className="gender">
                                     <FormControl style={{ width: "100%" }}>
@@ -317,8 +280,8 @@ function FirstStep() {
                                             id="demo-simple-select"
                                             label="เพศ"
                                             style={{ width: "100%" }}
-                                            value={formData['thirdGender']}
-                                            onChange={(e) => handleInputChange("thirdGender", e.target.value)}
+                                            value={formData['secondGender']}
+                                            onChange={(e) => handleInputChange("secondGender", e.target.value)}
                                         >
                                             <MenuItem value={"ชาย"}>ชาย</MenuItem>
                                             <MenuItem value={"หญิง"}>หญิง</MenuItem>
@@ -326,55 +289,113 @@ function FirstStep() {
                                     </FormControl>
                                 </div>
                                 <div className="date">
-                                    <CommonlyUsedComponents value={formData['thirdBirth']} onChange={(date) => handleInputChange("thirdBirth", date)} />
+                                    <CommonlyUsedComponents value={formData['secondBirth']} onChange={(date) => handleInputChange("secondBirth", date)} />
                                 </div>
                                 <div className="age">
                                     <TextField label="อายุ(ปี)" style={{ width: "100%" }} />
                                 </div>
-                                <div className="loan-max">
-                                    <TextField label="กู้ได้สูงสุด(ปี)" />
-                                </div>
+
                                 <div className="career">
-                                    <FormControl style={{ width: "100%" }}>
-                                        <InputLabel id="demo-simple-select-label2">อาชีพ</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label2"
-                                            id="career-select"
-                                            style={{ width: "100%" }}
-                                            label="อาชีพ"
-                                            value={formData['thirdCareer']} onChange={(e) => handleInputChange("thirdCareer", e.target.value)}
-                                        >
-                                            <MenuItem value={"ชาย"}>ชาย</MenuItem>
-                                            <MenuItem value={"gay"}>gay</MenuItem>
-                                            <MenuItem value={"หญิง"}>หญิง</MenuItem>
-                                        </Select>
-                                    </FormControl>
+                                <TextField
+                                label="อาชีพ"
+                                style={{ width: "100%" }}
+                                value={formData['SecondCareer']}
+                                onChange={(e) => handleInputChange("SecondCareer", e.target.value)}
+                            />
                                 </div>
                                 <div className="income">
-                                    <TextField label="รายรับรวม" style={{ width: "100%" }} value={formData['thirdIncome']} onChange={(e) => handleInputChange("thirdIncome", e.target.value)}
+                                    <TextField label="รายรับรวม" value={formData['secondIncome']} onChange={(e) => handleInputChange("secondIncome", e.target.value)} style={{ width: "100%" }}
                                         InputProps={{
                                             inputComponent: NumericFormatCustom,
                                         }}
                                     />
                                 </div>
                                 <div className="expenses">
-                                    <TextField label="รายจ่ายรวม" style={{ width: "100%" }} value={formData['thirdExpenses']} onChange={(e) => handleInputChange("thirdExpenses", e.target.value)}
+                                    <TextField label="รายจ่ายรวม" style={{ width: "100%" }} value={formData['secondExpenses']} onChange={(e) => handleInputChange("secondExpenses", e.target.value)}
                                         InputProps={{
                                             inputComponent: NumericFormatCustom,
-                                        }}
-                                    />
+                                        }} />
                                 </div>
                             </div>
                         </Collapse>
                     </div>
-                </Collapse>
-            </div>
+                    <Collapse in={showThirdBorrower}>
+                        <div className="thirdBorrower-box">
+                            <div className="thirdBorrower-head">
+                                <p className="borrowerSection">ผู้กู้ร่วมคนที่ 2</p>
+                                <div className="thirdBorrower-option">
+                                    {thirdBorrowerIcon ? (
+                                        <RemoveIcon
+                                            className="delete"
+                                            onClick={toggleThirdBorrowerForm}
+                                        />
+                                    ) : (
+                                        <AddIcon className="add" onClick={toggleThirdBorrowerForm} />
+                                    )}
+                                </div>
+                            </div>
+                            <Collapse in={showThirdBorrowerForm}>
+                                <div className="thirdBorrower-form">
+                                    <div className="name">
+                                        <TextField label="ชื่อ-นามสกุล" style={{ width: "100%" }} value={formData['thirdName']} onChange={(e) => handleInputChange("thirdName", e.target.value)} />
+                                    </div>
+                                    <div className="gender">
+                                        <FormControl style={{ width: "100%" }}>
+                                            <InputLabel id="demo-simple-select-label">เพศ</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                label="เพศ"
+                                                style={{ width: "100%" }}
+                                                value={formData['thirdGender']}
+                                                onChange={(e) => handleInputChange("thirdGender", e.target.value)}
+                                            >
+                                                <MenuItem value={"ชาย"}>ชาย</MenuItem>
+                                                <MenuItem value={"หญิง"}>หญิง</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                    <div className="date">
+                                        <CommonlyUsedComponents value={formData['thirdBirth']} onChange={(date) => handleInputChange("thirdBirth", date)} />
+                                    </div>
+                                    <div className="age">
+                                        <TextField label="อายุ(ปี)" style={{ width: "100%" }} />
+                                    </div>
 
-            {/* button section */}
-            <div className="btn-css">
-                <Button variant="contained" onClick={handleSubmit}>
-                    ถัดไป
-                </Button>
+                                    <div className="career">
+                                    <TextField
+                                label="อาชีพ"
+                                style={{ width: "100%" }}
+                                value={formData['ThirdCareer']}
+                                onChange={(e) => handleInputChange("ThirdCareer", e.target.value)}
+                            />
+                                    </div>
+                                    <div className="income">
+                                        <TextField label="รายรับรวม" style={{ width: "100%" }} value={formData['thirdIncome']} onChange={(e) => handleInputChange("thirdIncome", e.target.value)}
+                                            InputProps={{
+                                                inputComponent: NumericFormatCustom,
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="expenses">
+                                        <TextField label="รายจ่ายรวม" style={{ width: "100%" }} value={formData['thirdExpenses']} onChange={(e) => handleInputChange("thirdExpenses", e.target.value)}
+                                            InputProps={{
+                                                inputComponent: NumericFormatCustom,
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </Collapse>
+                        </div>
+                    </Collapse>
+                </div>
+
+                {/* button section */}
+                <div className="btn-css">
+                    <Button variant="contained" onClick={handleSubmit}>
+                        ถัดไป
+                    </Button>
+                </div>
             </div>
         </div>
     );

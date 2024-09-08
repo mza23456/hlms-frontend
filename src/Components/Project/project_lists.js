@@ -7,6 +7,7 @@ import { LuPencilLine } from "react-icons/lu";
 import { Button, TextField, Select, InputLabel, MenuItem, FormControl, Collapse } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import BackButton from '../BackButton/BackButton';
 
 const Project = () => { 
   const navigate = useNavigate();
@@ -49,9 +50,7 @@ const Project = () => {
   };
 
   const filteredProjects = projects.filter(project =>
-    (project.saleName.includes(searchTerm) ||
-    project.owner.includes(searchTerm) ||
-    project.name.includes(searchTerm)) &&
+    project.owner.includes(searchTerm) &&
     (selectedType === '' || project.type === selectedType) // Filter by project type
   );
 
@@ -84,19 +83,15 @@ const Project = () => {
         </FormControl>
       </div>
       </div>
-  {/* <div className="input-container">
-  <TextField label="ค้นหา" style={{ width: "100%" }} />
-  </div>
-  <button className="reset-button">ล้างข้อมูล</button> */}
         <div className="input-container">
         <TextField 
           label="ค้นหา" 
           value={searchTerm} 
           onChange={handleSearchChange} 
-          style={{ width: "100%" }} 
         />
+              <button className="reset-button" onClick={() => { setSearchTerm(''); setSelectedType(''); }}>ล้างข้อมูล</button>
       </div>
-      <button className="reset-button" onClick={() => { setSearchTerm(''); setSelectedType(''); }}>ล้างข้อมูล</button>
+      <BackButton />
 </div>
       <table className="project-table">
         <thead>
@@ -110,40 +105,6 @@ const Project = () => {
           </tr>
         </thead>
         <tbody>
-          {/* <tr>
-            <td>1</td>
-            <td>กนกวรรณ สุนทรานนท์</td>
-            <td>บมจ. เอพี (ไทยแลนด์)</td>
-            <td>บจ. เอพี (สาทร)</td>
-            <td>HomeLoan Management System</td>
-            <td>
-              <div className="icon-container">
-                <LuTrash2
-                  color="#FF8000"
-                  size="40px"
-                  fontWeight="bold" // Make sure to use a valid value for fontWeight
-                  style={{
-                    backgroundColor: '#FFDDBA',
-                    borderRadius: '10px',
-                    padding: '5px',
-                    cursor: 'pointer', // Add cursor pointer for better UX
-                  }}
-                />
-              </div>
-              <LuPencilLine
-                color="#015CCA"
-                size="40px"
-                fontWeight="bold" // Make sure to use a valid value for fontWeight
-                style={{
-                  backgroundColor: '#69AFFD',
-                  borderRadius: '10px',
-                  padding: '5px',
-                  cursor: 'pointer', // Add cursor pointer for better UX
-                }}
-                onClick={() => handleEditClick(1)} // Pass project ID
-              />
-            </td>
-          </tr> */}
           {filteredProjects.map((project, index) => (
             <tr key={project.projectId}>
               <td>{index + 1}</td>
@@ -153,18 +114,6 @@ const Project = () => {
               <td>{project.type}</td>
               <td>
                 <div className="icon-container">
-                  <LuTrash2
-                    color="#FF8000"
-                    size="40px"
-                    style={{
-                      backgroundColor: '#FFDDBA',
-                      borderRadius: '10px',
-                      padding: '5px',
-                      cursor: 'pointer',
-                      marginRight: '10px', // Add margin to the right
-                    }}
-                    onClick={() => handleDelete(project.projectId)}
-                  />
                   <LuPencilLine
                     color="#015CCA"
                     size="40px"
@@ -173,178 +122,25 @@ const Project = () => {
                       borderRadius: '10px',
                       padding: '5px',
                       cursor: 'pointer',
+                      marginRight: '10px', // Add margin to the right
                     }}
                     onClick={() => handleEditClick(project.projectId)}
+                  />
+                  <LuTrash2
+                    color="#FF8000"
+                    size="40px"
+                    style={{
+                      backgroundColor: '#FFDDBA',
+                      borderRadius: '10px',
+                      padding: '5px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => handleDelete(project.projectId)}
                   />
                 </div>
               </td>
             </tr>
           ))}
-          {/* <tr>
-            <td>2</td>
-            <td>ศุภเศรษฐ์ โมธรรม</td>
-            <td>บมจ. เอพี (ไทยแลนด์)</td>
-            <td>บจ. เอพี (รัชโยธิน)</td>
-            <td>HomeLoan Management System</td>
-            <td>
-              <div className="icon-container">
-                <LuTrash2
-                  color="#FF8000"
-                  size="40px"
-                  fontWeight="bold" // Make sure to use a valid value for fontWeight
-                  style={{
-                    backgroundColor: '#FFDDBA',
-                    borderRadius: '10px',
-                    padding: '5px',
-                    cursor: 'pointer', // Add cursor pointer for better UX
-                  }}
-                />
-              </div>
-              <LuPencilLine
-                color="#015CCA"
-                size="40px"
-                fontWeight="bold" // Make sure to use a valid value for fontWeight
-                style={{
-                  backgroundColor: '#69AFFD',
-                  borderRadius: '10px',
-                  padding: '5px',
-                  cursor: 'pointer', // Add cursor pointer for better UX
-                }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>ณรงค์ชัย ชอบอาษา</td>
-            <td>บมจ. ลลิล พร็อพเตอร์ตี้</td>
-            <td>-</td>
-            <td>HomeLoan Management System</td>
-            <td>
-              <div className="icon-container">
-                <LuTrash2
-                  color="#FF8000"
-                  size="40px"
-                  fontWeight="bold" // Make sure to use a valid value for fontWeight
-                  style={{
-                    backgroundColor: '#FFDDBA',
-                    borderRadius: '10px',
-                    padding: '5px',
-                    cursor: 'pointer', // Add cursor pointer for better UX
-                  }}
-                />
-              </div>
-              <LuPencilLine
-                color="#015CCA"
-                size="40px"
-                fontWeight="bold" // Make sure to use a valid value for fontWeight
-                style={{
-                  backgroundColor: '#69AFFD',
-                  borderRadius: '10px',
-                  padding: '5px',
-                  cursor: 'pointer', // Add cursor pointer for better UX
-                }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>ธนภูมิ ยาปนะโกศล</td>
-            <td>บมจ. แลนด์แอนด์เฮาส์</td>
-            <td>บจ. แอล เอช เมืองใหม่</td>
-            <td>HomeLoan Management System</td>
-            <td>
-              <div className="icon-container">
-                <LuTrash2
-                  color="#FF8000"
-                  size="40px"
-                  fontWeight="bold" // Make sure to use a valid value for fontWeight
-                  style={{
-                    backgroundColor: '#FFDDBA',
-                    borderRadius: '10px',
-                    padding: '5px',
-                    cursor: 'pointer', // Add cursor pointer for better UX
-                  }}
-                />
-              </div>
-              <LuPencilLine
-                color="#015CCA"
-                size="40px"
-                fontWeight="bold" // Make sure to use a valid value for fontWeight
-                style={{
-                  backgroundColor: '#69AFFD',
-                  borderRadius: '10px',
-                  padding: '5px',
-                  cursor: 'pointer', // Add cursor pointer for better UX
-                }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>วรภพ ศรีแจ่ม</td>
-            <td>บมจ. แสนสิริ</td>
-            <td>บจ. แสนสิริแลนด์</td>
-            <td>HomeLoan Management System</td>
-          <td>
-              <div className="icon-container">
-                <LuTrash2
-                  color="#FF8000"
-                  size="40px"
-                  fontWeight="bold" // Make sure to use a valid value for fontWeight
-                  style={{
-                    backgroundColor: '#FFDDBA',
-                    borderRadius: '10px',
-                    padding: '5px',
-                    cursor: 'pointer', // Add cursor pointer for better UX
-                  }}
-                />
-              </div>
-              <LuPencilLine
-                color="#015CCA"
-                size="40px"
-                fontWeight="bold" // Make sure to use a valid value for fontWeight
-                style={{
-                  backgroundColor: '#69AFFD',
-                  borderRadius: '10px',
-                  padding: '5px',
-                  cursor: 'pointer', // Add cursor pointer for better UX
-                }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td>ปิยธิดา มุจรินทร์</td>
-            <td>บมจ. เอ็ม บี เค</td>
-            <td>บจ. แปลน เอสเตท</td>
-            <td>HomeLoan Management System</td>
-            <td>
-              <div className="icon-container">
-                <LuTrash2
-                  color="#FF8000"
-                  size="40px"
-                  fontWeight="bold" // Make sure to use a valid value for fontWeight
-                  style={{
-                    backgroundColor: '#FFDDBA',
-                    borderRadius: '10px',
-                    padding: '5px',
-                    cursor: 'pointer', // Add cursor pointer for better UX
-                  }}
-                />
-              </div>
-              <LuPencilLine
-                color="#015CCA"
-                size="40px"
-                fontWeight="bold" // Make sure to use a valid value for fontWeight
-                style={{
-                  backgroundColor: '#69AFFD',
-                  borderRadius: '10px',
-                  padding: '5px',
-                  cursor: 'pointer', // Add cursor pointer for better UX
-                }}
-              />
-            </td>
-          </tr> */}
         </tbody>
       </table>
     </div>
