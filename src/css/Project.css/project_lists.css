@@ -1,6 +1,8 @@
-.project-table {
-  width: 100%; /* คงขนาดความกว้างเต็ม */
-  max-width: 100%; /* กำหนดขนาดสูงสุดของความกว้าง */
+.project-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 7rem 3rem; /* Increase top padding */
+  /* กำหนดขนาดสูงสุดของความกว้าง */
   border-collapse: collapse;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -8,6 +10,7 @@
 }
 
 .project-table th, .project-table td {
+  width: 1200px;
   padding: 14px;
   text-align: left;
   border-bottom: 1px solid #e0e0e0;

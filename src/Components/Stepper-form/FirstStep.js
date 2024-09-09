@@ -283,8 +283,8 @@ function FirstStep() {
                                             value={formData['secondGender']}
                                             onChange={(e) => handleInputChange("secondGender", e.target.value)}
                                         >
-                                            <MenuItem value={"ชาย"}>ชาย</MenuItem>
-                                            <MenuItem value={"หญิง"}>หญิง</MenuItem>
+                                            <MenuItem value={"male"}>ชาย</MenuItem>
+                                            <MenuItem value={"female"}>หญิง</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </div>

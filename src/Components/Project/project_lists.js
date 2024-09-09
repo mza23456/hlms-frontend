@@ -59,7 +59,7 @@ const Project = () => {
   };
 
   return (
-    <div className="container">
+    <div className="project-container">
       <Navbar />
       <h1>ตรวจสอบโครงการ</h1>
       <p>ระบบค้นหาแบบรวมเงื่อนไข</p>

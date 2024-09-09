@@ -29,7 +29,7 @@ const ProjectDetails = ({ projectId }) => {
   if (!project) return <div>ไม่พบข้อมูลโครงการ</div>;
 
   return (
-    <div className="container">
+    <div className="ProjectDetail-container">
       <Navbar />
       <div className="header">ข้อมูลโครงการ</div>
       <div className="info-box">

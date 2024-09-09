@@ -8,6 +8,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import Collapse from "@mui/material/Collapse";
 
+
+
 function SecondStep() {
     const { setStep, formData, setFormData } = useContext(multiStepContex);
     const [showInsure, setShowInsure] = useState(formData['insure'] === 'yes');
@@ -18,7 +20,7 @@ function SecondStep() {
         setShowInsure(value === 'yes');
         console.log("Insurance option selected:", value);
         if (value === 'yes') {
-            updateInsuranceValues();
+            calculateInsurance();
         }
     };
     
@@ -34,33 +36,6 @@ function SecondStep() {
         return rates[projectType] || { firstYearRate: 0, fourthYearRate: 0, EIR: 0 };
     };
 
-    const updateInsuranceValues = () => {
-        // Example values, replace with actual calculation logic
-        const insuranceAmount = (formData['projectPrice'] * 0.80) || 0;
-        const premium = (insuranceAmount * 0.05) || 0; // Assume a rate of 5% for example
-        const totalInsuranceCost = insuranceAmount + premium;
-
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            insuranceAmount: insuranceAmount,
-            premium: premium,
-            totalInsuranceCost: totalInsuranceCost,
-        }));
-        console.log("Updated Insurance Values:", {
-            insuranceAmount,
-            premium,
-            totalInsuranceCost
-        });
-    }
-    // ฟังก์ชันสำหรับคำนวณทุนประกัน
-    const calculateInsuranceAmount = (contractPrice) => {
-        return 0.8 * contractPrice;
-    };
-
-    // ฟังก์ชันสำหรับคำนวณเบี้ยประกัน
-    const calculatePremium = (insuranceAmount, insuranceInterestRate) => {
-        return (insuranceAmount * insuranceInterestRate) / 1000;
-    };
 
     // ฟังก์ชันคำนวณสำหรับประกัน
     const calculateInsurance = () => {
@@ -70,7 +45,7 @@ function SecondStep() {
         const duration = parseInt(formData['insureDuration']) || 10;
         const insuranceRates = {
             male: { // เพศชาย
-                10: { // ระยะเวลา 10 ปี
+                10: { 
                     20: 21.47, 21: 21.85, 22: 22.10, 23: 22.26, 24: 22.39, 25: 22.51, 26: 22.68, 27: 22.92, 28: 23.24, 29: 23.68,
                     30: 24.25, 31: 24.96, 32: 25.81, 33: 26.82, 34: 27.98, 35: 29.32, 36: 30.83, 37: 32.49, 38: 34.28, 39: 36.22,
                     40: 38.32, 41: 40.59, 42: 43.10, 43: 45.83, 44: 48.80, 45: 52.06, 46: 55.65, 47: 59.99, 48: 64.80, 49: 70.16,
@@ -98,18 +73,26 @@ function SecondStep() {
                 }
             }
         };
+       
+        
         const rate = insuranceRates[gender][duration]?.[age] || 0;
         const insuranceAmount = 0.8 * contractPrice;
         const premium = (insuranceAmount * rate) / 1000;
         const totalInsuranceCost = insuranceAmount + premium;
+        console.log("Contract Price:", contractPrice);
+        console.log("Age:", age);
+        console.log("Gender:", gender);
+        console.log("Duration:", duration);
+        console.log("Insurance Rate:", rate);
 
         setFormData({
         ...formData,
         insuranceAmount: insuranceAmount.toFixed(2),
         premium: premium.toFixed(2),
-        totalInsuranceCost: totalInsuranceCost.toFixed(2)
+        totalInsuranceCost: totalInsuranceCost.toFixed(2),
+        
     });
-
+    
         console.log("Updated Insurance Values:", {
             insuranceAmount,
             premium,
@@ -212,11 +195,11 @@ function SecondStep() {
                                     id="demo-simple-select"
                                     label="ระยะเวลาเอาประกัน"
                                     style={{ width: "100%" }}
-                                    value={formData['insureDuration']} onChange={(e) => setFormData({...formData, "insureDuration" : e.target.value})}
+                                    value={formData['insureDuration']} onChange={(e) => setFormData({...formData, "insureDuration" : e.target.value},calculateInsurance)}
                                     
                                 >
-                                    <MenuItem value={"10"}>10 ปี</MenuItem>
-                                    <MenuItem value={"15"}>15 ปี</MenuItem>
+                                    <MenuItem value={"10"} >10 ปี</MenuItem>
+                                    <MenuItem value={"15"} >15 ปี</MenuItem>
                                 </Select>
                             </FormControl>
                         </div>
