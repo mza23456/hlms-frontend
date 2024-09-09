@@ -2,19 +2,21 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../Sidebar-nav/Navbar";
 import HomeIcon from "../../img/house (1).png";
 import "../../css/Project.css/project_lists.css";
-import { LuTrash2 } from "react-icons/lu";
+import { IoTrashBin } from "react-icons/io5";
 import { LuPencilLine } from "react-icons/lu";
 import { Button, TextField, Select, InputLabel, MenuItem, FormControl, Collapse } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import BackButton from '../BackButton/BackButton';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 const Project = () => { 
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState(''); // State for project type selection
-
+  const MySwal = withReactContent(Swal);
 
   useEffect(() => {
     // Fetch data from your API endpoint
@@ -39,14 +41,38 @@ const Project = () => {
   };
 
   const handleDelete = async (projectId) => {
-    if (window.confirm('คุณแน่ใจว่าต้องการลบโครงการนี้หรือไม่?')) {
-      try {
-        await axios.delete(`http://localhost:5000/Project/projects/${projectId}`); // Replace with your API URL
-        setProjects(projects.filter((project) => project.projectId !== projectId)); // Update the UI by removing the deleted project
-      } catch (error) {
-        console.error('Error deleting project:', error);
+    MySwal.fire({
+      title: 'คุณแน่ใจว่าต้องการลบโครงการนี้หรือไม่?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'ตกลง',
+      cancelButtonText: 'ยกเลิก',
+      reverseButtons: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`http://localhost:5000/Project/projects/${projectId}`);
+          setProjects(projects.filter((project) => project.projectId !== projectId));
+          
+          await MySwal.fire({
+            title: 'ลบสำเร็จ!',
+            html: 'โครงการได้ถูกลบแล้ว',
+            icon: 'success',
+            timer: 1500,
+            timerProgressBar: true,
+          });
+        } catch (error) {
+          console.error('Error deleting project:', error);
+          await MySwal.fire({
+            title: 'เกิดข้อผิดพลาด!',
+            html: 'ไม่สามารถลบโครงการได้',
+            icon: 'error',
+            timer: 1500,
+            timerProgressBar: true,
+          });
+        }
       }
-    }
+    });
   };
 
   const filteredProjects = projects.filter(project =>
@@ -61,8 +87,10 @@ const Project = () => {
   return (
     <div className="container">
       <Navbar />
+      <div className="project-list-header">
       <h1>ตรวจสอบโครงการ</h1>
       <p>ระบบค้นหาแบบรวมเงื่อนไข</p>
+      </div>
       <div className="search-section">
       <div className="select-box">
       <div className="projecttype">
@@ -116,7 +144,7 @@ const Project = () => {
                 <div className="icon-container">
                   <LuPencilLine
                     color="#015CCA"
-                    size="35px"
+                    size="25px"
                     style={{
                       backgroundColor: '#69AFFD',
                       borderRadius: '10px',
@@ -126,9 +154,9 @@ const Project = () => {
                     }}
                     onClick={() => handleEditClick(project.projectId)}
                   />
-                  <LuTrash2
+                  <IoTrashBin
                     color="#FF1919"
-                    size="35px"
+                    size="25px"
                     style={{
                       backgroundColor: '#FFA6A6',
                       borderRadius: '10px',
