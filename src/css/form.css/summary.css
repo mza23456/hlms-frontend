@@ -11,7 +11,7 @@
             display: flex;
             justify-content: space-between;
             & .borrower-box{
-                width: 180px;
+                width: 13rem;
                 background-color: rgba(238, 238, 238, 1);
                 padding: .5rem;
                 border-radius: 12px;
@@ -28,6 +28,7 @@
         }
         & .project-container{
             background-color: rgba(238, 238, 238, 1);
+            width: 39.5rem;
             margin-top: .8rem;
             padding: 1rem .8rem;
             border-radius: 12px;
@@ -87,7 +88,7 @@
     color: white;
     padding: .5rem;
     border-radius: 12px;
-    width: 180px;
+    width:13rem;
     & h4{
         font-size: 18px;
     }

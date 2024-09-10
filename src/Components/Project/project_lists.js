@@ -8,12 +8,15 @@ import { Button, TextField, Select, InputLabel, MenuItem, FormControl, Collapse 
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import BackButton from '../BackButton/BackButton';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
-const Project = () => { 
+const Project = () => {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState(''); // State for project type selection
+  const MySwal = withReactContent(Swal);
 
 
   useEffect(() => {
@@ -39,14 +42,38 @@ const Project = () => {
   };
 
   const handleDelete = async (projectId) => {
-    if (window.confirm('คุณแน่ใจว่าต้องการลบโครงการนี้หรือไม่?')) {
-      try {
-        await axios.delete(`http://localhost:5000/Project/projects/${projectId}`); // Replace with your API URL
-        setProjects(projects.filter((project) => project.projectId !== projectId)); // Update the UI by removing the deleted project
-      } catch (error) {
-        console.error('Error deleting project:', error);
+    MySwal.fire({
+      title: 'คุณแน่ใจว่าต้องการลบโครงการนี้หรือไม่?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'ตกลง',
+      cancelButtonText: 'ยกเลิก',
+      reverseButtons: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`http://localhost:5000/Project/projects/${projectId}`);
+          setProjects(projects.filter((project) => project.projectId !== projectId));
+
+          await MySwal.fire({
+            title: 'ลบสำเร็จ!',
+            html: 'โครงการได้ถูกลบแล้ว',
+            icon: 'success',
+            timer: 1500,
+            timerProgressBar: true,
+          });
+        } catch (error) {
+          console.error('Error deleting project:', error);
+          await MySwal.fire({
+            title: 'เกิดข้อผิดพลาด!',
+            html: 'ไม่สามารถลบโครงการได้',
+            icon: 'error',
+            timer: 1500,
+            timerProgressBar: true,
+          });
+        }
       }
-    }
+    });
   };
 
   const filteredProjects = projects.filter(project =>
@@ -59,40 +86,46 @@ const Project = () => {
   };
 
   return (
-    <div className="project-container">
+    <div className="project-Body">
       <Navbar />
-      <h1>ตรวจสอบโครงการ</h1>
-      <p>ระบบค้นหาแบบรวมเงื่อนไข</p>
-      <div className="search-section">
-      <div className="select-box">
-      <div className="projecttype">
-        <FormControl style={{ width: "100%" }}>
-          <InputLabel id="demo-simple-select-label2">ประเภทโครงการ</InputLabel>
-          <Select
-            labelId="demo-simple-select-label2"
-            id="project-select"
-            value={selectedType}
-            onChange={handleTypeChange}
+      <div className="project-container">
+        <div className="project-list-header">
+          <h3>ตรวจสอบโครงการ</h3>
+          <BackButton />
+        </div>
+        <div className="inner-Project">
+        <div className="search-section">
+      <h5>ระบบค้นหาแบบรวมเงื่อนไข</h5>
+        <div className="select-box">
+          <div className="projecttype">
+            <FormControl style={{ width: "100%" }}>
+              <InputLabel id="demo-simple-select-label2">ประเภทโครงการ</InputLabel>
+              <Select
+                labelId="demo-simple-select-label2"
+                id="project-select"
+                value={selectedType}
+                onChange={handleTypeChange}
+                style={{ width: "100%" }}
+                label="ประเภทโครงการ"
+              >
+                <MenuItem value="">ทั้งหมด</MenuItem>
+                <MenuItem value="Top Selective">Top Selective</MenuItem>
+                <MenuItem value="Non Selective">Non Selective</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+        </div>
+        <div className="input-project">
+          <TextField
+            label="ค้นหา"
+            value={searchTerm}
+            onChange={handleSearchChange}
             style={{ width: "100%" }}
-            label="ประเภทโครงการ"
-          >
-            <MenuItem value="">ทั้งหมด</MenuItem>
-            <MenuItem value="Top Selective">Top Selective</MenuItem>
-            <MenuItem value="Non Selective">Non Selective</MenuItem>
-          </Select>
-        </FormControl>
+          />
+          
+        </div>
+        <button className="reset-button" onClick={() => { setSearchTerm(''); setSelectedType(''); }}>ล้างข้อมูล</button>
       </div>
-      </div>
-        <div className="input-container">
-        <TextField 
-          label="ค้นหา" 
-          value={searchTerm} 
-          onChange={handleSearchChange} 
-        />
-              <button className="reset-button" onClick={() => { setSearchTerm(''); setSelectedType(''); }}>ล้างข้อมูล</button>
-      </div>
-      <BackButton />
-</div>
       <table className="project-table">
         <thead>
           <tr>
@@ -143,6 +176,10 @@ const Project = () => {
           ))}
         </tbody>
       </table>
+        </div>
+      
+      </div>
+      
     </div>
   );
 };

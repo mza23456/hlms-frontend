@@ -150,9 +150,9 @@ function ProfileUser() {
       <Navbar />
       <div className='container'>
         <div className='head-title' style={{width: '66rem'}}>
-        <h4>Profile</h4>
-        <BackButton />
-      </div>
+          <h4>Profile</h4>
+          <BackButton />
+        </div>
         <div className='inner-content'>
           <div className='head'>
             <img className='user-img' src={imgSrc} alt='User Avatar' />

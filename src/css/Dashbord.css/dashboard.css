@@ -58,6 +58,7 @@ body {
     height: 11rem;
     display: flex;
     flex-wrap: wrap;
+    gap: 0 2rem;
     & .card-con {
         display: flex;
         width: 41rem;
@@ -69,7 +70,7 @@ body {
         /* background-color: rgb(67, 155, 155); */
 
         & .card-item {
-            background-color: rgba(255, 255, 255, 1);
+            /* background-color: rgba(255, 255, 255, 1); */
             width: 20rem;
             height: 8rem;
             border-radius: 5px;
@@ -77,7 +78,6 @@ body {
             align-items: start;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 0 10px .25px rgba(183, 96, 249, 0.228);
 
             & .top-card {
                 display: flex;
@@ -135,15 +135,14 @@ body {
 
     & .graph-con {
         background-color: rgba(255, 255, 255, 1);
-        width: 46.8rem;
+        width: 44rem;
         height: 18.5rem;
         border-radius: 10px;
         padding: .5rem;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: start;
-        box-shadow: 0 0 10px .25px rgba(183, 96, 249, 0.228);
+        justify-content: end;
         margin-top: .5rem;
         & span {
             /* background-color: aqua; */
@@ -152,21 +151,18 @@ body {
     }
     & .pie-con{
         background-color: rgba(255, 255, 255, 1);
-        width: 27rem;
+        width: 28rem;
         height: 18.5rem;
         border-radius: 10px;
         padding: .5rem;
-        box-shadow: 0 0 10px .25px rgba(183, 96, 249, 0.228);
         margin-top: 2rem;
     }
     & .time-con{
         background-color: rgba(255, 255, 255, 1);
-        width: 60rem;
+        width: 57rem;
         height: 18.5rem;
         border-radius: 10px;
         padding: .5rem;
-        box-shadow: 0 0 10px .25px rgba(183, 96, 249, 0.228);
         margin-top: 2rem;
-        margin-left: 1rem;
     }
 }

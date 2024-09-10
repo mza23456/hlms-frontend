@@ -27,6 +27,7 @@ const chartSetting = {
   ],
   series: [{ dataKey: 'seoul', label: 'คอมมิสชั่น',color: 'rgb(187,0,242)', valueFormatter }],
   height: 300,
+  
   sx: {
     [`& .${axisClasses.directionY} .${axisClasses.label}`]: {
       transform: 'translateX(-10px)',
@@ -104,7 +105,7 @@ const Dashboard = () => {
                 onClick={handleCardClick}
                 style={{ cursor: 'pointer' }} // เพิ่ม pointer เพื่อแสดงว่าทั้ง div สามารถคลิกได้
               >
-                <div className='top-card'>
+                <div className='top-card' style={{backgroundColor: '#FFE4BF'}}>
 
                   <div className='card-info'>
                     <h2 style={{color: 'rgb(255, 145, 0)'}}>{projectCount}</h2>
@@ -123,7 +124,7 @@ const Dashboard = () => {
                 onClick={handleCardClick}
                 style={{ cursor: 'pointer' }} // เพิ่ม pointer เพื่อแสดงว่าทั้ง div สามารถคลิกได้
               >
-                <div className='top-card'>
+                <div className='top-card' style={{backgroundColor: '#BFDEFF'}}>
 
                   <div className='card-info'>
                     <h2 style={{color: '#007bff'}}>{projectCount}</h2>
@@ -142,7 +143,7 @@ const Dashboard = () => {
                 onClick={handleCardClick}
                 style={{ cursor: 'pointer' }} // เพิ่ม pointer เพื่อแสดงว่าทั้ง div สามารถคลิกได้
               >
-                <div className='top-card'>
+                <div className='top-card' style={{backgroundColor: '#BFE8C3'}}>
 
                   <div className='card-info'>
                     <h2 style={{color: 'rgb(0,163,16)'}}>{projectCount}</h2>
@@ -161,7 +162,7 @@ const Dashboard = () => {
                 onClick={handleCardClick}
                 style={{ cursor: 'pointer' }} // เพิ่ม pointer เพื่อแสดงว่าทั้ง div สามารถคลิกได้
               >
-                <div className='top-card'>
+                <div className='top-card' style={{backgroundColor: '#EEBFFC'}}>
 
                   <div className='card-info'>
                     <h2 style={{color: 'rgb(187,0,242)'}}>{projectCount}</h2>
@@ -231,10 +232,11 @@ const Dashboard = () => {
                   { id: 0, value: 10, label: 'กำลังส่ง' ,color: '#787878'},
                   { id: 1, value: 15, label: 'เสร็จสิ้น' ,color: 'rgb(0,163,16)'},
                 ],
+                innerRadius: 70 
               },
             ]}
-            width={400}
-            height={250}
+            width={300}
+            height={200}
           />
         </div>
         <div className='time-con'>d</div>

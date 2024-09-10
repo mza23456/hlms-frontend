@@ -1,6 +1,8 @@
 import React, { useContext } from 'react'
 import { Button} from '@mui/material'
 import { multiStepContex } from '../../stepContex'
+import AnimatedNumber from './input-type/AnimaetionNumber';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
 
 
 function ThirdStep() {
@@ -42,12 +44,12 @@ function ThirdStep() {
                                 </div>
                                 <div className='project-info'>
                                     <p className='cl-main'>ประกันชีวิตคุ้มครองสินเชื่อ: </p>
-                                    <p className='cl-second'>{formData.insure}</p>
+                                    <p className='cl-second'>{formData.insure || "ไม่มี"}</p>
                                 </div>
                             </div>
                             <div className='project-info'>
                                 <p className='cl-main'>ราคาซื้อขาย:</p>
-                                <p className='cl-second'>3,000,000 บาท</p>
+                                <p className='cl-second'>{formatCurrency(Number(formData.projectPrice))} บาท</p>
                             </div>
                             <div className='project-info'>
                                 <p className='cl-main'>รายรับรวม: </p>
@@ -75,7 +77,7 @@ function ThirdStep() {
                             </div>
                             <div className='homeloan-info'>
                                 <p>ระยะเวลากู้: </p>
-                                <p>30 ปี</p>
+                                <p>{formData.maxLoanTerm} ปี</p>
                             </div>
                             <div className='homeloan-info'>
                                 <p>อัตราหนี้สินต่อรายได้(DTI): </p>
@@ -83,7 +85,7 @@ function ThirdStep() {
                             </div>
                             <div className='homeloan-info'>
                                 <p>เปอร์เซ็นต์อนุมัติ: </p>
-                                <p>90 %</p>
+                                <AnimatedNumber value={formData.ltv} />
                             </div>
                             <div className='underline'></div>
                             <div className='homeloan-info'>
@@ -95,7 +97,8 @@ function ThirdStep() {
                 </div>
             </div>
             <div className='btn-css'>
-                <Button variant='contained' onClick={() => setStep(1)}>แก้ไข</Button>
+                <Button variant='outlined' onClick={() => setStep(1)}>แก้ไข</Button>
+                <Button variant='contained' endIcon={<SaveAltIcon />}>บันทึกข้อมูล</Button>
             </div>
         </div>
     )

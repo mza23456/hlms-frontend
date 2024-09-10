@@ -5,6 +5,8 @@ import { NumericFormat } from 'react-number-format';
 import CommonlyUsedComponents from "./input-type/date";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useNavigate } from 'react-router-dom';
+
 
 // calculate function
 const calculateAge = (birthDate) => {
@@ -14,29 +16,14 @@ const calculateAge = (birthDate) => {
     return currentYear - birthYear;
 };
 const calculateMaxLoanTerm = (birthDate) => {
-    if (!birthDate) return ''; // ตรวจสอบค่า birthDate ว่ามีอยู่หรือไม่
-
+    if (!birthDate) return '';
     const age = calculateAge(birthDate);
-    const maxLoanTermBasedOnAge = 65 - age; // คำนวณระยะเวลากู้ตามอายุ
-
-    // จำกัดระยะเวลากู้สูงสุดไม่เกิน 35 ปี
-    const maxLoanTerm = maxLoanTermBasedOnAge > 35 ? 35 : maxLoanTermBasedOnAge;
-
-    // ตรวจสอบว่าค่ากู้สูงสุดเป็น 0 หรือลบ
-    if (maxLoanTerm <= 0) {
-        return 'ไม่สามารถกู้ได้';
-    }
-    return maxLoanTerm;
-};
-const calculateDTI = (totalIncome, totalExpenses) => {
-    if (!totalIncome || totalIncome <= 0) {
-        return 'ไม่สามารถคำนวณ DTI ได้'; // ป้องกันการหารด้วยศูนย์หรือตัวเลขติดลบ
-    }
-
-    const dti = (totalExpenses / totalIncome) *100;
-    return dti.toFixed(1); // ปัดเศษทศนิยม 2 ตำแหน่ง
+    const maxLoanTermBasedOnAge = 65 - age;
+    const maxLoanTerm = Math.min(maxLoanTermBasedOnAge, 35);
+    return maxLoanTerm <= 0 ? 'ไม่สามารถกู้ได้' : maxLoanTerm;
 };
 
+const calculateNumberOfInstallments = (maxLoanTerm) => maxLoanTerm * 12;
 // setFormatNumber function
 const NumericFormatCustom = React.forwardRef(
     function NumericFormatCustom(props, ref) {
@@ -95,24 +82,25 @@ function FirstStep() {
         toggleFunction();
         setAddedState(!addedState);
     };
+    const navigate = useNavigate();
 
+  const handleBack = () => {
+    navigate("/dashboard"); // พาผู้ใช้กลับไปยังหน้าที่พวกเขาเข้าชมก่อนหน้า
+  };
     // innerfunction
-    const mainBirth = formData['mainBirth']; // แยกตัวแปรออกมา
 
-    useEffect(() => {
-        if (mainBirth) {
-            setFormData({ ...formData, "mainAge": calculateAge(mainBirth) });
-        }
-    }, [mainBirth, setFormData, formData]);
     useEffect(() => {
         if (formData.mainBirth) {
-            const maxLoanTerm = calculateMaxLoanTerm(formData.mainBirth);
-            setFormData((prevData) => ({
+            setFormData(prevData => ({
                 ...prevData,
-                maxLoanTerm: maxLoanTerm,
+                mainAge: calculateAge(formData.mainBirth),
+                maxLoanTerm: calculateMaxLoanTerm(formData.mainBirth),
+                numberOfInstallments: calculateNumberOfInstallments(calculateMaxLoanTerm(formData.mainBirth))
             }));
+            
         }
     }, [formData.mainBirth, setFormData]);
+    
     // Validation function
     const validate = () => {
         let tempErrors = {};
@@ -128,26 +116,45 @@ function FirstStep() {
 
     // Clear error when input changes
     const handleInputChange = (field, value) => {
-        setFormData({ ...formData, [field]: value });
-        setErrors({ ...errors, [field]: "" });
-
-        const mainIncome = parseFloat(formData.mainIncome || 0);
-    const mainExpenses = parseFloat(formData.mainExpenses || 0);
-    const secondIncome = parseFloat(formData.secondIncome || 0);
-    const secondExpenses = parseFloat(formData.secondExpenses || 0);
-    const thirdIncome = parseFloat(formData.thirdIncome || 0);
-    const thirdExpenses = parseFloat(formData.thirdExpenses || 0);
-
-    // คำนวณรายรับและรายจ่ายรวม
-    const totalIncome = mainIncome + secondIncome + thirdIncome;
-    const totalExpenses = mainExpenses + secondExpenses + thirdExpenses;
-
-    // คำนวณ DTI ใหม่
-    const newDti = calculateDTI(totalIncome, totalExpenses);
-    setFormData((prevData) => ({ ...prevData,totalIncome, 
-        totalExpenses, dti: newDti }));
+        // อัปเดตค่าใน formData
+        setFormData(prevData => {
+            // สร้างอ็อบเจ็กต์ใหม่ที่รวมการเปลี่ยนแปลง
+            const updatedData = {
+                ...prevData,
+                [field]: value
+            };
+    
+            // คำนวณค่าใหม่
+            const totalIncome = ['mainIncome', 'secondIncome', 'thirdIncome']
+                .reduce((sum, key) => sum + parseFloat(updatedData[key] || 0), 0);
+            const totalExpenses = ['mainExpenses', 'secondExpenses', 'thirdExpenses']
+                .reduce((sum, key) => sum + parseFloat(updatedData[key] || 0), 0);
+                const dti = calculateDTI(totalIncome, totalExpenses);
+                const ltv = calculateLTV(dti);
+            return {
+                ...updatedData,
+                totalIncome,
+                totalExpenses,
+                dti,
+                ltv
+            };
+        });
+    
+        // เคลียร์ข้อผิดพลาด
+        setErrors(prevErrors => ({ ...prevErrors, [field]: "" }));
+    };
+    
+    const calculateDTI = (totalIncome, totalExpenses) => {
+        if (totalIncome <= 0) return 'ไม่สามารถคำนวณ DTI ได้';
+        return (totalExpenses / totalIncome * 100).toFixed(1);
     };
 
+    const calculateLTV = (dti) => {
+        if (dti <= 70) return 100;
+        if (dti <= 90) return 95;
+        if (dti <= 100) return 90;
+        return 0;
+    };
     // Handle submit
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -169,7 +176,7 @@ function FirstStep() {
                             <TextField
                                 label="ชื่อ-นามสกุล"
                                 style={{ width: "100%" }}
-                                value={formData['mainName']}
+                                value={formData.mainName}
                                 onChange={(e) => handleInputChange("mainName", e.target.value)}
                                 error={!!errors.mainName}
                                 helperText={errors.mainName}
@@ -183,11 +190,11 @@ function FirstStep() {
                                     id="demo-simple-select"
                                     label="เพศ"
                                     style={{ width: "100%" }}
-                                    value={formData['mainGender']}
+                                    value={formData.mainGender}
                                     onChange={(e) => handleInputChange("mainGender", e.target.value)}
                                 >
-                                    <MenuItem value={"male"}>ชาย</MenuItem>
-                                    <MenuItem value={"female"}>หญิง</MenuItem>
+                                    <MenuItem value="male">ชาย</MenuItem>
+                                    <MenuItem value="female">หญิง</MenuItem>
                                 </Select>
                                 {errors.mainGender && <p style={{ color: 'red' }}>{errors.mainGender}</p>}
                             </FormControl>
@@ -195,7 +202,7 @@ function FirstStep() {
                         <div className="date">
                             <CommonlyUsedComponents
                                 style={{ width: "100%" }}
-                                value={formData['mainBirth']}
+                                value={formData.mainBirth}
                                 onChange={(date) => handleInputChange("mainBirth", date)}
                                 error={!!errors.mainBirth}
                             />
@@ -211,7 +218,7 @@ function FirstStep() {
                             <TextField
                                 label="อาชีพ"
                                 style={{ width: "100%" }}
-                                value={formData['mainCareer']}
+                                value={formData.mainCareer}
                                 onChange={(e) => handleInputChange("mainCareer", e.target.value)}
                                 error={!!errors.mainCareer}
                                 helperText={errors.mainCareer}
@@ -221,7 +228,7 @@ function FirstStep() {
                             <TextField
                                 label="รายรับรวม"
                                 style={{ width: "100%" }}
-                                value={formData['mainIncome']}
+                                value={formData.mainIncome}
                                 onChange={(e) => handleInputChange("mainIncome", e.target.value)}
                                 InputProps={{
                                     inputComponent: NumericFormatCustom,
@@ -234,7 +241,7 @@ function FirstStep() {
                             <TextField
                                 label="รายจ่ายรวม"
                                 style={{ width: "100%" }}
-                                value={formData['mainExpenses']}
+                                value={formData.mainExpenses}
                                 onChange={(e) => handleInputChange("mainExpenses", e.target.value)}
                                 InputProps={{
                                     inputComponent: NumericFormatCustom,
@@ -280,16 +287,16 @@ function FirstStep() {
                                             id="demo-simple-select"
                                             label="เพศ"
                                             style={{ width: "100%" }}
-                                            value={formData['secondGender']}
+                                            value={formData.secondGender}
                                             onChange={(e) => handleInputChange("secondGender", e.target.value)}
                                         >
-                                            <MenuItem value={"male"}>ชาย</MenuItem>
-                                            <MenuItem value={"female"}>หญิง</MenuItem>
+                                            <MenuItem value="male">ชาย</MenuItem>
+                                            <MenuItem value="female">หญิง</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </div>
                                 <div className="date">
-                                    <CommonlyUsedComponents value={formData['secondBirth']} onChange={(date) => handleInputChange("secondBirth", date)} />
+                                    <CommonlyUsedComponents value={formData.secondBirth} onChange={(date) => handleInputChange("secondBirth", date)} />
                                 </div>
                                 <div className="age">
                                     <TextField label="อายุ(ปี)" style={{ width: "100%" }} />
@@ -299,19 +306,19 @@ function FirstStep() {
                                 <TextField
                                 label="อาชีพ"
                                 style={{ width: "100%" }}
-                                value={formData['SecondCareer']}
+                                value={formData.SecondCareer}
                                 onChange={(e) => handleInputChange("SecondCareer", e.target.value)}
                             />
                                 </div>
                                 <div className="income">
-                                    <TextField label="รายรับรวม" value={formData['secondIncome']} onChange={(e) => handleInputChange("secondIncome", e.target.value)} style={{ width: "100%" }}
+                                    <TextField label="รายรับรวม" value={formData.secondIncome} onChange={(e) => handleInputChange("secondIncome", e.target.value)} style={{ width: "100%" }}
                                         InputProps={{
                                             inputComponent: NumericFormatCustom,
                                         }}
                                     />
                                 </div>
                                 <div className="expenses">
-                                    <TextField label="รายจ่ายรวม" style={{ width: "100%" }} value={formData['secondExpenses']} onChange={(e) => handleInputChange("secondExpenses", e.target.value)}
+                                    <TextField label="รายจ่ายรวม" style={{ width: "100%" }} value={formData.secondExpenses} onChange={(e) => handleInputChange("secondExpenses", e.target.value)}
                                         InputProps={{
                                             inputComponent: NumericFormatCustom,
                                         }} />
@@ -337,7 +344,7 @@ function FirstStep() {
                             <Collapse in={showThirdBorrowerForm}>
                                 <div className="thirdBorrower-form">
                                     <div className="name">
-                                        <TextField label="ชื่อ-นามสกุล" style={{ width: "100%" }} value={formData['thirdName']} onChange={(e) => handleInputChange("thirdName", e.target.value)} />
+                                        <TextField label="ชื่อ-นามสกุล" style={{ width: "100%" }} value={formData.thirdName} onChange={(e) => handleInputChange("thirdName", e.target.value)} />
                                     </div>
                                     <div className="gender">
                                         <FormControl style={{ width: "100%" }}>
@@ -347,16 +354,16 @@ function FirstStep() {
                                                 id="demo-simple-select"
                                                 label="เพศ"
                                                 style={{ width: "100%" }}
-                                                value={formData['thirdGender']}
+                                                value={formData.thirdGender}
                                                 onChange={(e) => handleInputChange("thirdGender", e.target.value)}
                                             >
-                                                <MenuItem value={"ชาย"}>ชาย</MenuItem>
-                                                <MenuItem value={"หญิง"}>หญิง</MenuItem>
+                                                <MenuItem value="ชาย">ชาย</MenuItem>
+                                                <MenuItem value="หญิง">หญิง</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </div>
                                     <div className="date">
-                                        <CommonlyUsedComponents value={formData['thirdBirth']} onChange={(date) => handleInputChange("thirdBirth", date)} />
+                                        <CommonlyUsedComponents value={formData.thirdBirth} onChange={(date) => handleInputChange("thirdBirth", date)} />
                                     </div>
                                     <div className="age">
                                         <TextField label="อายุ(ปี)" style={{ width: "100%" }} />
@@ -366,19 +373,19 @@ function FirstStep() {
                                     <TextField
                                 label="อาชีพ"
                                 style={{ width: "100%" }}
-                                value={formData['ThirdCareer']}
+                                value={formData.ThirdCareer}
                                 onChange={(e) => handleInputChange("ThirdCareer", e.target.value)}
                             />
                                     </div>
                                     <div className="income">
-                                        <TextField label="รายรับรวม" style={{ width: "100%" }} value={formData['thirdIncome']} onChange={(e) => handleInputChange("thirdIncome", e.target.value)}
+                                        <TextField label="รายรับรวม" style={{ width: "100%" }} value={formData.thirdIncome} onChange={(e) => handleInputChange("thirdIncome", e.target.value)}
                                             InputProps={{
                                                 inputComponent: NumericFormatCustom,
                                             }}
                                         />
                                     </div>
                                     <div className="expenses">
-                                        <TextField label="รายจ่ายรวม" style={{ width: "100%" }} value={formData['thirdExpenses']} onChange={(e) => handleInputChange("thirdExpenses", e.target.value)}
+                                        <TextField label="รายจ่ายรวม" style={{ width: "100%" }} value={formData.thirdExpenses} onChange={(e) => handleInputChange("thirdExpenses", e.target.value)}
                                             InputProps={{
                                                 inputComponent: NumericFormatCustom,
                                             }}
@@ -392,6 +399,9 @@ function FirstStep() {
 
                 {/* button section */}
                 <div className="btn-css">
+                    <Button variant="outlined" onClick={handleBack}>
+                        ยกเลิก
+                    </Button>
                     <Button variant="contained" onClick={handleSubmit}>
                         ถัดไป
                     </Button>

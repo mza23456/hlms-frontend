@@ -1,5 +1,7 @@
-import React, { useContext,useState } from 'react'
+import React, { useContext,useState,useEffect } from 'react'
 import { Button, TextField, Select, InputLabel, MenuItem } from '@mui/material'
+import { NumericFormat } from 'react-number-format';
+
 import FormControl from '@mui/material/FormControl';
 import { multiStepContex } from '../../stepContex'
 import Radio from '@mui/material/Radio';
@@ -8,24 +10,73 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import Collapse from "@mui/material/Collapse";
 
+const NumericFormatCustom = React.forwardRef(
+    function NumericFormatCustom(props, ref) {
+        const { onChange, ...other } = props;
 
+        return (
+            <NumericFormat
+                {...other}
+                getInputRef={ref}
+                onValueChange={(values) => {
+                    onChange({
+                        target: {
+                            name: props.name,
+                            value: values.value,
+                        },
+                    });
+                }}
+                thousandSeparator
+                valueIsNumericString
+                suffix=" บาท"
+            />
+        );
+    },
+);
 
 function SecondStep() {
     const { setStep, formData, setFormData } = useContext(multiStepContex);
-    const [showInsure, setShowInsure] = useState(formData['insure'] === 'yes');
+    const [showInsure, setShowInsure] = useState(formData['insure'] === 'no');
 
     const handleRadioChange = (event) => {
         const value = event.target.value;
         setFormData({ ...formData, 'insure': value });
         setShowInsure(value === 'yes');
         console.log("Insurance option selected:", value);
-        if (value === 'yes') {
-            calculateInsurance();
-        }
-    };
     
+    };
+    const calculateMonthlyInstallment = () => {
+        const totalInsuranceCost = parseFloat(formData['totalInsuranceCost']) || 0;
+        const projectType = formData['projectType'];
+        const hasFullProducts = formData['service'] === 'ครบ';
+        
+        // อัตราดอกเบี้ย
+        const interestRates = getInterestRates(projectType, hasFullProducts);
+        const annualInterestRate = (interestRates.firstYearRate + interestRates.fourthYearRate) / 2; // ตัวอย่างการใช้ค่าเฉลี่ย
+    
+        // จำนวนงวด
+        const numberOfInstallments = parseInt(formData['numberOfInstallments']) || 12; // ตัวอย่าง: 12 เดือน
+    
+        // คำนวณดอกเบี้ยรวม
+        const totalInterest = (totalInsuranceCost * annualInterestRate / 100) / numberOfInstallments;
+    
+        // คำนวณการผ่อนชำระรายเดือน
+        const monthlyInstallment = (totalInsuranceCost + totalInterest) / numberOfInstallments;
+    
+        // บันทึกค่า monthlyInstallment ไปยัง formData
+        setFormData({ ...formData, monthlyInstallment: monthlyInstallment.toFixed(2) });
+    
+        console.log("Monthly Installment:", monthlyInstallment.toFixed(2));
+    };
+    useEffect(() => {
+        if (formData['insure'] === 'yes') {
+            calculateInsurance();
+            calculateMonthlyInstallment();
+        }
+    }, [formData['projectPrice'], formData['mainAge'], formData['mainGender'], formData['insureDuration'], formData['numberOfInstallments']]);
+
     const getInterestRates = (projectType, hasFullProducts) => {
-        const rates = {
+        const rates = { //อัตตราดอกเบี้ย
             'Top Selective': hasFullProducts
                 ? { firstYearRate: 3.50, fourthYearRate: 5.00, EIR: 4.50 }
                 : { firstYearRate: 3.99, fourthYearRate: 5.25, EIR: 4.84 },
@@ -76,9 +127,9 @@ function SecondStep() {
        
         
         const rate = insuranceRates[gender][duration]?.[age] || 0;
-        const insuranceAmount = 0.8 * contractPrice;
-        const premium = (insuranceAmount * rate) / 1000;
-        const totalInsuranceCost = insuranceAmount + premium;
+        const insuranceAmount = 0.8 * contractPrice; //ทุนประกัน
+        const premium = (insuranceAmount * rate) / 1000; //เบี้ยประกัน
+        const totalInsuranceCost = insuranceAmount + premium; //วงเงินจำนอง
         console.log("Contract Price:", contractPrice);
         console.log("Age:", age);
         console.log("Gender:", gender);
@@ -150,7 +201,10 @@ function SecondStep() {
                         </FormControl>
                     </div>
                     <div className='price'>
-                        <TextField label="ราคาขายตามสัญญา" style={{ width: "100%" }} value={formData['projectPrice']} onChange={(e) => setFormData({...formData, "projectPrice" : e.target.value})}/>
+                        <TextField label="ราคาขายตามสัญญา" style={{ width: "100%" }} value={formData['projectPrice']} onChange={(e) => setFormData({...formData, "projectPrice" : e.target.value})}
+                            InputProps={{
+                                inputComponent: NumericFormatCustom,
+                            }}/>
                     </div>
 
                     <div className='show-interest-info'>
@@ -195,7 +249,8 @@ function SecondStep() {
                                     id="demo-simple-select"
                                     label="ระยะเวลาเอาประกัน"
                                     style={{ width: "100%" }}
-                                    value={formData['insureDuration']} onChange={(e) => setFormData({...formData, "insureDuration" : e.target.value},calculateInsurance)}
+                                    value={formData['insureDuration']} 
+                                    onChange={(e) => setFormData({...formData, "insureDuration" : e.target.value})}
                                     
                                 >
                                     <MenuItem value={"10"} >10 ปี</MenuItem>
@@ -204,20 +259,29 @@ function SecondStep() {
                             </FormControl>
                         </div>
                         <div className='insure-cost'>
-                                <TextField label="ทุนประกัน" style={{ width: '100%' }} value={formData['insuranceAmount'] || ''} readOnly />
+                                <TextField label="ทุนประกัน" style={{ width: '100%' }} value={formData['insuranceAmount'] || ''} readOnly 
+                                InputProps={{
+                                    inputComponent: NumericFormatCustom,
+                                }}/>
                             </div>
                             <div className='insure-interest'>
-                                <TextField label="เบี้ยประกัน" style={{ width: '100%' }} value={formData['premium'] || ''} readOnly />
+                                <TextField label="เบี้ยประกัน" style={{ width: '100%' }} value={formData['premium'] || ''} readOnly 
+                                InputProps={{
+                                    inputComponent: NumericFormatCustom,
+                                }}/>
                             </div>
                             <div className='insure-total'>
-                                <TextField label="ราคาซื้อขายเบี้ยประกัน" style={{ width: '100%' }} value={formData['totalInsuranceCost'] || ''} readOnly />
+                                <TextField label="ราคาซื้อขายเบี้ยประกัน" style={{ width: '100%' }} value={formData['totalInsuranceCost'] || ''} readOnly 
+                                InputProps={{
+                                    inputComponent: NumericFormatCustom,
+                                }}/>
                             </div>
                     </div>
                 </div>
                 </Collapse>
             </div>
             <div className='btn-css'>
-                <Button variant='contained' onClick={() => setStep(1)}>ย้อนกลับ</Button>
+                <Button variant='outlined' onClick={() => setStep(1)}>ย้อนกลับ</Button>
                 <Button variant='contained' onClick={() => setStep(3)}>วิเคราะห์ผล</Button>
             </div>
         </div>
