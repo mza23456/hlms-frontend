@@ -17,6 +17,15 @@ body {
   color: #F79737
 }
 
+.project-list-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 7rem 3rem;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
 .icon-container {
   display: inline-block;
   border: 2px solid transparent;

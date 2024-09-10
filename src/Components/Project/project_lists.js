@@ -85,7 +85,7 @@ const Project = () => {
   };
 
   return (
-    <div className="container">
+    <div className="project-list-container">
       <Navbar />
       <div className="project-list-header">
       <h1>ตรวจสอบโครงการ</h1>
