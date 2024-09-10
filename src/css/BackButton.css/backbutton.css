@@ -3,12 +3,14 @@
     align-items: center;
     color: #015cca; 
     cursor: pointer;
-    font-size: 20px;
+    font-size: 15px;
+    font-weight: bold;
   }
   
   .back-button .icon {
-    margin-right: 5px;
-    font-size: 16px; /* ขนาดของไอคอนลูกศร */
+    margin-right: 2px;
+    margin-bottom: 2px;
+    font-size: 15px; /* ขนาดของไอคอนลูกศร */
   }
 
   .back-button:hover {

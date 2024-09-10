@@ -1,0 +1,81 @@
+body {
+  overflow-y: scroll;
+}
+
+.project-list-header {
+  color: #F79737
+}
+
+.icon-container {
+  display: inline-block;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  padding: 6px;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.search-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.select-box {
+  flex: 1;
+  min-width: 120px;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 2;
+}
+
+.reset-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  background-color: #ff3535;
+  color: #ffffff;
+}
+
+.reset-button:hover {
+  background-color: #d60000;
+}
+
+.project-table {
+  width: 100%; /* คงขนาดความกว้างเต็ม */
+  max-width: 100%; /* กำหนดขนาดสูงสุดของความกว้าง */
+  border-collapse: collapse;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  table-layout: fixed; /* ล็อคความกว้างของตาราง */
+  border-radius: 20px; /* Add border-radius to the table */
+  overflow: hidden; /* Hide overflow to maintain rounded corners */
+}
+
+.project-table th, .project-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 15px;
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+}
+
+.project-table thead {
+  background-color: #F79737;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+}
+
+/* กำหนดความสูงขั้นต่ำให้กับแถวของตาราง */
+.project-table tr {
+  min-height: 40px; /* ปรับความสูงตามที่ต้องการ */
+}

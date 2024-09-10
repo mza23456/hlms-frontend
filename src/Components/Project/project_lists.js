@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../Sidebar-nav/Navbar";
 import HomeIcon from "../../img/house (1).png";
 import "../../css/Project.css/project_lists.css";
-import { LuTrash2 } from "react-icons/lu";
+import { IoTrashBin } from "react-icons/io5";
 import { LuPencilLine } from "react-icons/lu";
 import { Button, TextField, Select, InputLabel, MenuItem, FormControl, Collapse } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import axios from 'axios';
 import BackButton from '../BackButton/BackButton';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+
 
 const Project = () => {
   const navigate = useNavigate();
@@ -94,92 +95,92 @@ const Project = () => {
           <BackButton />
         </div>
         <div className="inner-Project">
-        <div className="search-section">
-      <h5>ระบบค้นหาแบบรวมเงื่อนไข</h5>
-        <div className="select-box">
-          <div className="projecttype">
-            <FormControl style={{ width: "100%" }}>
-              <InputLabel id="demo-simple-select-label2">ประเภทโครงการ</InputLabel>
-              <Select
-                labelId="demo-simple-select-label2"
-                id="project-select"
-                value={selectedType}
-                onChange={handleTypeChange}
+          <div className="search-section">
+            <h5>ระบบค้นหาแบบรวมเงื่อนไข</h5>
+            <div className="select-box">
+              <div className="projecttype">
+                <FormControl style={{ width: "100%" }}>
+                  <InputLabel id="demo-simple-select-label2">ประเภทโครงการ</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label2"
+                    id="project-select"
+                    value={selectedType}
+                    onChange={handleTypeChange}
+                    style={{ width: "100%" }}
+                    label="ประเภทโครงการ"
+                  >
+                    <MenuItem value="">ทั้งหมด</MenuItem>
+                    <MenuItem value="Top Selective">Top Selective</MenuItem>
+                    <MenuItem value="Non Selective">Non Selective</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+            </div>
+            <div className="input-project">
+              <TextField
+                label="ค้นหา"
+                value={searchTerm}
+                onChange={handleSearchChange}
                 style={{ width: "100%" }}
-                label="ประเภทโครงการ"
-              >
-                <MenuItem value="">ทั้งหมด</MenuItem>
-                <MenuItem value="Top Selective">Top Selective</MenuItem>
-                <MenuItem value="Non Selective">Non Selective</MenuItem>
-              </Select>
-            </FormControl>
+              />
+
+            </div>
+            <button className="reset-button" onClick={() => { setSearchTerm(''); setSelectedType(''); }}>ล้างข้อมูล</button>
           </div>
+          <table className="project-table ">
+            <thead >
+              <tr >
+                <th>ลำดับ</th>
+                <th>พนักงานผู้รับผิดชอบ</th>
+                <th>ชื่อบริษัท</th>
+                <th>ชื่อบริษัทย่อย</th>
+                <th>ประเภทโครงการ</th>
+                <th>การจัดการ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredProjects.map((project, index) => (
+                <tr key={project.projectId}>
+                  <td>{index + 1}</td>
+                  <td>{project.officer?.firstName} {project.officer?.lastName}</td>
+                  <td>{project.owner}</td>
+                  <td>{project.name}</td>
+                  <td>{project.type}</td>
+                  <td>
+                    <div className="icon-container">
+                      <LuPencilLine
+                        color="#015CCA"
+                        size="25px"
+                        style={{
+                          backgroundColor: '#69AFFD',
+                          borderRadius: '10px',
+                          padding: '5px',
+                          cursor: 'pointer',
+                          marginRight: '5px', // Add margin to the right
+                        }}
+                        onClick={() => handleEditClick(project.projectId)}
+                      />
+                      <IoTrashBin
+                        color="#FF1919"
+                        size="25px"
+                        style={{
+                          backgroundColor: '#FFA6A6',
+                          borderRadius: '10px',
+                          padding: '5px',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handleDelete(project.projectId)}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <div className="input-project">
-          <TextField
-            label="ค้นหา"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            style={{ width: "100%" }}
-          />
-          
-        </div>
-        <button className="reset-button" onClick={() => { setSearchTerm(''); setSelectedType(''); }}>ล้างข้อมูล</button>
+
       </div>
-      <table className="project-table">
-        <thead>
-          <tr>
-            <th>ลำดับ</th>
-            <th>พนักงานผู้รับผิดชอบ</th>
-            <th>ชื่อบริษัท</th>
-            <th>ชื่อบริษัทย่อย</th>
-            <th>ประเภทโครงการ</th>
-            <th>การจัดการ</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredProjects.map((project, index) => (
-            <tr key={project.projectId}>
-              <td>{index + 1}</td>
-              <td>{project.officer?.firstName}</td>
-              <td>{project.owner}</td>
-              <td>{project.name}</td>
-              <td>{project.type}</td>
-              <td>
-                <div className="icon-container">
-                  <LuPencilLine
-                    color="#015CCA"
-                    size="40px"
-                    style={{
-                      backgroundColor: '#69AFFD',
-                      borderRadius: '10px',
-                      padding: '5px',
-                      cursor: 'pointer',
-                      marginRight: '10px', // Add margin to the right
-                    }}
-                    onClick={() => handleEditClick(project.projectId)}
-                  />
-                  <LuTrash2
-                    color="#FF8000"
-                    size="40px"
-                    style={{
-                      backgroundColor: '#FFDDBA',
-                      borderRadius: '10px',
-                      padding: '5px',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => handleDelete(project.projectId)}
-                  />
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-        </div>
-      
-      </div>
-      
+
     </div>
   );
 };

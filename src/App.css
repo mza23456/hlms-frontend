@@ -11,7 +11,7 @@ body{
 
 /* แถบเลื่อนทั้งหมด */
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 5px;
     position: relative;
 }
 
