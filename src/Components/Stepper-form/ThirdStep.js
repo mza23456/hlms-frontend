@@ -85,7 +85,7 @@ function ThirdStep() {
                             </div>
                             <div className='homeloan-info'>
                                 <p>เปอร์เซ็นต์อนุมัติ: </p>
-                                <AnimatedNumber value={formData.ltv} />
+                                <p>{formData.ltv} %</p>
                             </div>
                             <div className='underline'></div>
                             <div className='homeloan-info'>

@@ -31,7 +31,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="dashboard/User-profile/:officerId" element={<ProfileUser/>} />
           <Route path="dashboard/homeloancal" element={<StepperControl />} />
-          <Route path="project-detail" element={<Project />} />
+          <Route path="dashboard/project-detail" element={<Project />} />
           <Route path="project-details/:id" element={<ProjectDetails />} />
         </Routes>
       </BrowserRouter>

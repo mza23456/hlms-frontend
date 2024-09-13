@@ -146,7 +146,7 @@ function FirstStep() {
     
     const calculateDTI = (totalIncome, totalExpenses) => {
         if (totalIncome <= 0) return 'ไม่สามารถคำนวณ DTI ได้';
-        return (totalExpenses / totalIncome * 100).toFixed(1);
+        return (totalExpenses / totalIncome * 100).toFixed(2);
     };
 
     const calculateLTV = (dti) => {

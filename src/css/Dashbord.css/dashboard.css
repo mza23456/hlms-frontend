@@ -1,5 +1,5 @@
 body {
-    background-color: rgba(249, 250, 252, 1);
+    background-color: rgb(231, 231, 231);
 
 }
 
@@ -9,49 +9,6 @@ body {
     flex-direction: column;
 
 }
-
-.img-customer-bg {
-    background-color: rgb(182, 217, 255);
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    & img {
-        width: 1.7rem;
-    }
-}
-
-.img-document-bg {
-    background-color: rgb(209, 255, 211);
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    & img {
-        width: 2.1rem;
-    }
-}
-
-.img-commission-bg {
-    background-color: rgb(250, 224, 255);
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    & img {
-        width: 2.1rem;
-    }
-}
-
 
 .card-floor {
     width: 100%;
@@ -70,10 +27,9 @@ body {
         /* background-color: rgb(67, 155, 155); */
 
         & .card-item {
-            /* background-color: rgba(255, 255, 255, 1); */
             width: 20rem;
             height: 8rem;
-            border-radius: 5px;
+            border-radius: 5px 5px 0 0;
             display: flex;
             align-items: start;
             flex-direction: column;
@@ -135,7 +91,7 @@ body {
 
     & .graph-con {
         background-color: rgba(255, 255, 255, 1);
-        width: 44rem;
+        width: 34rem;
         height: 18.5rem;
         border-radius: 10px;
         padding: .5rem;
@@ -159,10 +115,123 @@ body {
     }
     & .time-con{
         background-color: rgba(255, 255, 255, 1);
-        width: 57rem;
+        width: 47.1rem;
         height: 18.5rem;
         border-radius: 10px;
         padding: .5rem;
         margin-top: 2rem;
+    }
+}
+
+@media(max-width:450px) {
+    #dashboard-con {
+        padding: 0 .5rem;
+        flex-direction: column;
+        height: 100vh;
+    
+    }
+
+
+    .card-floor {
+        width: 100%;
+        height: 11rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0 2rem;
+        & .card-con {
+            display: flex;
+            width: 100%;
+            height: 16rem;
+            gap: .3rem;
+    
+            & .card-item {
+                width: 49%;
+                height: 8rem;
+                display: flex;
+                align-items: start;
+                flex-direction: column;
+                justify-content:start;
+    
+                & .top-card {
+                    display: flex;
+                    padding: .5rem;
+                    border-radius: 5px 5px 0 0;
+    
+                    width: 100%;
+                    display: flex;
+                    align-items: start;
+                    justify-content: space-between;
+    
+                    & .img-bg {
+                        height: 1rem;
+                        padding-top: unset;
+                    }
+    
+                    & .card-info {
+                        width: 20rem;
+                        line-height: .2rem;
+                        padding-left: 1rem;
+                        padding-top: .5rem;
+                        & h2 {
+                            font-weight: bold;
+                            font-size: 28px;
+                        }
+    
+                        & p {
+                            color: rgb(88, 88, 88);
+                            width: 6rem;
+                            font-size: 18px;
+                        }
+                    }
+                }
+    
+                & .card-link {
+                    
+                    width: 100%;
+                    height: 2rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    border-radius: 0 0 5px 5px;
+                    padding: 0 1.5rem;
+                    & p {
+                        font-size: 16px;
+                        margin-top: 1.5rem;
+                        color: aliceblue;
+                    }
+                }
+            }
+        }
+    
+        & .graph-con {
+            background-color: rgba(255, 255, 255, 1);
+            width: 44rem;
+            height: 18.5rem;
+            border-radius: 10px;
+            padding: .5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: end;
+            margin-top: .5rem;
+            & span {
+                /* background-color: aqua; */
+                width: 100%;
+            }
+        }
+        & .pie-con{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        & .time-con{
+            background-color: rgba(255, 255, 255, 1);
+            width: 57rem;
+            height: 18.5rem;
+            border-radius: 10px;
+            padding: .5rem;
+            margin-top: 2rem;
+        }
     }
 }

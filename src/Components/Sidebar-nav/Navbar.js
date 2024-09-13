@@ -15,12 +15,9 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Dialog from '@mui/material/Dialog';
@@ -29,6 +26,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
+import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
+import MapsHomeWorkOutlinedIcon from '@mui/icons-material/MapsHomeWorkOutlined';
+import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+
 
 import Avatar from '@mui/material/Avatar';
 
@@ -48,7 +50,7 @@ function Navbar() {
     const navigate = useNavigate();
 
 
-    
+
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -82,26 +84,26 @@ function Navbar() {
 
     const handleDialogOpen = () => {
         setOpenDialog(true);
-      };
-    
-      const handleDialogClose = () => {
+    };
+
+    const handleDialogClose = () => {
         setOpenDialog(false);
-      };
+    };
 
     const handleLogout = async () => {
         setOpen(false);
         try {
-          // ส่งคำขอไปที่ API สำหรับการล็อกเอาต์
-          await axios.post('http://localhost:5000/api/login/logout', {}, {headers: { 'x-access-token': localStorage.getItem('token') }});
-          localStorage.removeItem('token');
-    
-          // เปลี่ยนเส้นทางไปยังหน้า login
-          navigate('/login');
+            // ส่งคำขอไปที่ API สำหรับการล็อกเอาต์
+            await axios.post('http://localhost:5000/api/login/logout', {}, { headers: { 'x-access-token': localStorage.getItem('token') } });
+            localStorage.removeItem('token');
+
+            // เปลี่ยนเส้นทางไปยังหน้า login
+            navigate('/login');
         } catch (error) {
-          console.error('Logout failed:', error);
-          // สามารถแจ้งเตือนผู้ใช้ว่าการล็อกเอาต์ล้มเหลว
+            console.error('Logout failed:', error);
+            // สามารถแจ้งเตือนผู้ใช้ว่าการล็อกเอาต์ล้มเหลว
         }
-      };
+    };
 
     useEffect(() => {
         // Handle outside click (if applicable)
@@ -202,6 +204,12 @@ function Navbar() {
     function goToHome() {
         navigate('/dashboard'); // กำหนด path 
     }
+    function goToProject() {
+        navigate('/dashboard/project-detail'); // กำหนด path 
+    }
+    function goToHome() {
+        navigate('/dashboard'); // กำหนด path 
+    }
     const handleClick = () => {
         setOpen(!open);
     };
@@ -283,26 +291,26 @@ function Navbar() {
                             </MenuItem>
                         </Menu>
                         <Dialog
-        open={openDialog}
-        onClose={handleDialogClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-        {"คุณต้องการออกจากระบบใช่หรือไม่?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-          คุณต้องการออกจากระบบใช่หรือไม่? การออกจากระบบจะทำให้คุณต้องทำการเข้าสู่ระบบอีกครั้งเพื่อเข้าถึงระบบ.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>ยกเลิก</Button>
-          <Button onClick={handleLogout} autoFocus>
-            ยืนยัน
-          </Button>
-        </DialogActions>
-      </Dialog>
+                            open={openDialog}
+                            onClose={handleDialogClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                {"คุณต้องการออกจากระบบใช่หรือไม่?"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    การออกจากระบบจะทำให้คุณต้องทำการเข้าสู่ระบบอีกครั้งเพื่อเข้าถึงระบบ.
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleDialogClose}>ยกเลิก</Button>
+                                <Button onClick={handleLogout} autoFocus>
+                                    ยืนยัน
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                     </div>
                     <Slide direction="right" in={isOpen} mountOnEnter unmountOnExit>
                         <div className='side-container'>
@@ -310,29 +318,13 @@ function Navbar() {
                                 <IconButton className='hov-btn'>
                                     <MenuIcon className='ham-icon' onClick={closeMenu} />
                                 </IconButton>
-                                <img src='https://companieslogo.com/img/orig/TTB.BK-d7b21f4a.png?t=1655632706' alt='Logo' onClick={goToHome}/>
+                                <img src='https://companieslogo.com/img/orig/TTB.BK-d7b21f4a.png?t=1655632706' alt='Logo' onClick={goToHome} />
                             </div>
                             <div className='menu-section'>
                                 <div className='topmenu-section' onClick={goToHome}>
                                     <HomeIcon className='home-icon' />
                                     <h3>หน้าหลัก</h3>
                                 </div>
-                                {/* <SimpleTreeView className='menu'>
-                                    <TreeItem className='menu-selection font-use' itemId="grid" label="จัดการสมัครสินเชื่อ" >
-                                        <TreeItem itemId="grid-community" label="เพิ่มข้อมูลลูกค้า" />
-                                        <TreeItem itemId="grid-pro" label="ตรวจสอบข้อมูลลูกค้า" />
-                                    </TreeItem>
-                                    <TreeItem className='menu-selection' itemId="pickers" label="จัดการใบสั่งงาน">
-                                        <TreeItem itemId="pickers-community" label="เพิ่มใบสั่งงาน" />
-                                        <TreeItem itemId="pickers-pro" label="ตรวจสอบพนักงานรับส่งเอกสาร" />
-                                        <TreeItem itemId="2" label="ตรวจสอบใบสั่งงาน" />
-                                    </TreeItem>
-                                    <TreeItem className='menu-selection' itemId='project' label="จัดการโครงการ">
-                                        <TreeItem itemId="project-1" label="เพิ่มข้อมูลลูกค้า" />
-                                        <TreeItem itemId="project-2" label="ตรวจสอบข้อมูลลูกค้า" />
-                                    </TreeItem>
-                                    <TreeItem className='menu-selection' itemId='cal' label="วิเคราะห์สินเชื่อบ้าน" onClick={goToCal}></TreeItem>
-                                </SimpleTreeView> */}
                                 <List
                                     sx={{
                                         width: '100%',
@@ -344,11 +336,6 @@ function Navbar() {
                                     }}
                                     component="nav"
                                     aria-labelledby="nested-list-subheader"
-                                // subheader={
-                                //     <ListSubheader component="div" id="nested-list-subheader">
-                                //         Nested List Items
-                                //     </ListSubheader>
-                                // }
                                 >
                                     <ListItemButton>
                                         <ListItemIcon>
@@ -357,29 +344,43 @@ function Navbar() {
                                         <ListItemText primary="วิเคราะห์สินเชื่อบ้าน" onClick={goToCal} />
                                     </ListItemButton>
                                     <Divider variant="middle" />
-                                    <ListItemButton>
-                                        <ListItemIcon>
-                                            <DraftsIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Drafts" />
-                                    </ListItemButton>
                                     <ListItemButton onClick={handleClick}>
                                         <ListItemIcon>
-                                            <InboxIcon />
+                                            <MapsHomeWorkOutlinedIcon />
                                         </ListItemIcon>
-                                        <ListItemText primary="จัดการโครงการ" />
+                                    <ListItemText primary="จัดการโครงการ" onClick={goToProject}/>
                                         {open ? <ExpandLess /> : <ExpandMore />}
                                     </ListItemButton>
                                     <Collapse in={open} timeout="auto" unmountOnExit>
                                         <List component="div" disablePadding>
-                                            <ListItemButton sx={{ pl: 4 }}>
-                                                <ListItemIcon>
-                                                    <StarBorder />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Starred" />
+                                            <ListItemButton sx={{ pl: 9 }} >
+                                                <ListItemText primary="ตรวจสอบโครงการ" onClick={goToProject}/>
+                                            </ListItemButton>
+                                            <ListItemButton sx={{ pl: 9 }}>
+                                                
+                                                <ListItemText primary="เพิ่มโครงการ" />
                                             </ListItemButton>
                                         </List>
                                     </Collapse>
+                                    <Divider variant="middle" />
+                                    <ListItemButton>
+                                        <ListItemIcon>
+                                            <PeopleAltIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="จัดการลูกค้าที่สมัคร" />
+                                    </ListItemButton>
+                                    <ListItemButton>
+                                        <ListItemIcon>
+                                            <FileCopyOutlinedIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="จัดการใบสั่ง" />
+                                    </ListItemButton>
+                                    <ListItemButton>
+                                        <ListItemIcon>
+                                            <RequestQuoteOutlinedIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="จัดการคอมมิชชั่น" />
+                                    </ListItemButton>
                                 </List>
                             </div>
                         </div>

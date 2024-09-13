@@ -149,7 +149,7 @@ function ProfileUser() {
     <div className='Body'>
       <Navbar />
       <div className='container'>
-        <div className='head-title' style={{width: '66rem'}}>
+        <div className='head-title' >
           <h4>Profile</h4>
           <BackButton />
         </div>
@@ -164,7 +164,7 @@ function ProfileUser() {
           <div className='Body-detail'>
             <div className='user-info'>
               <div className='top'>
-                <h4>User Information</h4>
+                <h5>User Information</h5>
                 <div style={{ display: 'inline-flex', gap: '10px', marginTop: '10px' }}>
                 {!editMode ? (
                   <Button id='1' variant="outlined" onClick={handleEditClick}>Edit</Button>
@@ -224,7 +224,7 @@ function ProfileUser() {
             </div>
             <div className='footer-detail'>
               <div className='left-detail'>
-                <h4>Affiliation</h4>
+                <h5>Affiliation</h5>
                 <div className='row'>
                   <h5>Code:</h5>
                   <p>{user.code}</p>

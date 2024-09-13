@@ -45,36 +45,14 @@ function SecondStep() {
         console.log("Insurance option selected:", value);
     
     };
-    const calculateMonthlyInstallment = () => {
-        const totalInsuranceCost = parseFloat(formData['totalInsuranceCost']) || 0;
-        const projectType = formData['projectType'];
-        const hasFullProducts = formData['service'] === 'ครบ';
-        
-        // อัตราดอกเบี้ย
-        const interestRates = getInterestRates(projectType, hasFullProducts);
-        const annualInterestRate = (interestRates.firstYearRate + interestRates.fourthYearRate) / 2; // ตัวอย่างการใช้ค่าเฉลี่ย
-    
-        // จำนวนงวด
-        const numberOfInstallments = parseInt(formData['numberOfInstallments']) || 12; // ตัวอย่าง: 12 เดือน
-    
-        // คำนวณดอกเบี้ยรวม
-        const totalInterest = (totalInsuranceCost * annualInterestRate / 100) / numberOfInstallments;
-    
-        // คำนวณการผ่อนชำระรายเดือน
-        const monthlyInstallment = (totalInsuranceCost + totalInterest) / numberOfInstallments;
-    
-        // บันทึกค่า monthlyInstallment ไปยัง formData
-        setFormData({ ...formData, monthlyInstallment: monthlyInstallment.toFixed(2) });
-    
-        console.log("Monthly Installment:", monthlyInstallment.toFixed(2));
-    };
     useEffect(() => {
         if (formData['insure'] === 'yes') {
             calculateInsurance();
-            calculateMonthlyInstallment();
+            // calculateMonthlyInstallment();
         }
     }, [formData['projectPrice'], formData['mainAge'], formData['mainGender'], formData['insureDuration'], formData['numberOfInstallments']]);
 
+    
     const getInterestRates = (projectType, hasFullProducts) => {
         const rates = { //อัตตราดอกเบี้ย
             'Top Selective': hasFullProducts
@@ -150,7 +128,7 @@ function SecondStep() {
             totalInsuranceCost
         });
     };
-
+    
     const { projectType, service } = formData;
     const hasFullProducts = service === 'ครบ';
     const interestRates = getInterestRates(projectType, hasFullProducts);

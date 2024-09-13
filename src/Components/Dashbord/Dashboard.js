@@ -48,7 +48,7 @@ const Dashboard = () => {
 
 
   const handleCardClick = () => {
-    navigate('/project-detail');
+    navigate('/dashboard/project-detail');
   };
 
   useEffect(() => {
@@ -127,7 +127,7 @@ const Dashboard = () => {
                 <div className='top-card' style={{backgroundColor: '#BFDEFF'}}>
 
                   <div className='card-info'>
-                    <h2 style={{color: '#007bff'}}>{projectCount}</h2>
+                    <h2 style={{color: '#007bff'}}>40</h2>
                     <p>ลูกค้าที่สมัคร</p>
                   </div>
                   <div className='img-bg'>
@@ -146,7 +146,7 @@ const Dashboard = () => {
                 <div className='top-card' style={{backgroundColor: '#BFE8C3'}}>
 
                   <div className='card-info'>
-                    <h2 style={{color: 'rgb(0,163,16)'}}>{projectCount}</h2>
+                    <h2 style={{color: 'rgb(0,163,16)'}}>10</h2>
                     <p>ใบสั่งงาน</p>
                   </div>
                   <div className='img-bg'>
@@ -165,7 +165,7 @@ const Dashboard = () => {
                 <div className='top-card' style={{backgroundColor: '#EEBFFC'}}>
 
                   <div className='card-info'>
-                    <h2 style={{color: 'rgb(187,0,242)'}}>{projectCount}</h2>
+                    <h2 style={{color: 'rgb(187,0,242)'}}>35</h2>
                     <p>คอมมิชชัน</p>
                   </div>
                   <div className='img-bg'>

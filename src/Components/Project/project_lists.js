@@ -131,10 +131,11 @@ const Project = () => {
             <thead >
               <tr >
                 <th>ลำดับ</th>
-                <th>พนักงานผู้รับผิดชอบ</th>
                 <th>ชื่อบริษัท</th>
                 <th>ชื่อบริษัทย่อย</th>
                 <th>ประเภทโครงการ</th>
+                <th>ช่วงราคา</th>
+                <th>จำนวน</th>
                 <th>การจัดการ</th>
               </tr>
             </thead>
@@ -142,15 +143,16 @@ const Project = () => {
               {filteredProjects.map((project, index) => (
                 <tr key={project.projectId}>
                   <td>{index + 1}</td>
-                  <td>{project.officer?.firstName} {project.officer?.lastName}</td>
                   <td>{project.owner}</td>
                   <td>{project.name}</td>
                   <td>{project.type}</td>
+                  <td>{project.minPrice}-{project.maxPrice}</td>
+                  <td>{project.amount} ยูนิต</td>
                   <td>
                     <div className="icon-container">
                       <LuPencilLine
-                        color="#015CCA"
-                        size="25px"
+                        color="#ffffff"
+                        size="40px"
                         style={{
                           backgroundColor: '#69AFFD',
                           borderRadius: '10px',
@@ -161,8 +163,8 @@ const Project = () => {
                         onClick={() => handleEditClick(project.projectId)}
                       />
                       <IoTrashBin
-                        color="#FF1919"
-                        size="25px"
+                        color="#ffffff"
+                        size="40px"
                         style={{
                           backgroundColor: '#FFA6A6',
                           borderRadius: '10px',

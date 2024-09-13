@@ -4,21 +4,21 @@ import axios from 'axios';
 import Navbar from "../Sidebar-nav/Navbar";
 import "../../css/Project.css/project_details.css";
 import BackButton from '../BackButton/BackButton';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
-
-const ProjectDetails = ({ projectId }) => {
-  const { id } = useParams(); // ดึงพารามิเตอร์ id จาก URL
-  const [project, setProject] = useState(null); // State เก็บข้อมูลโครงการ
-  const [loading, setLoading] = useState(true); // State สำหรับแสดงโหลดดิ้ง
-  const [error, setError] = useState(null); // State เก็บข้อความแสดงข้อผิดพลาด
+const ProjectDetails = () => {
+  const { id } = useParams(); // Get id from URL
+  const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // ฟังก์ชันดึงข้อมูลโปรเจคจาก API
     const fetchProject = async () => {
       try {
-        // ใช้ projectId ในการสร้าง URL
         const response = await axios.get(`http://localhost:5000/Project/projects/${id}`);
-        setProject(response.data); // เก็บข้อมูลโปรเจคใน state
+        setProject(response.data);
         setLoading(false);
       } catch (err) {
         setError('ไม่สามารถดึงข้อมูลโปรเจคได้');
@@ -26,78 +26,132 @@ const ProjectDetails = ({ projectId }) => {
       }
     };
 
-    // ตรวจสอบว่า projectId มีค่าอยู่หรือไม่
     if (id) {
-      fetchProject(); // เรียกใช้ฟังก์ชันดึงข้อมูล
+      fetchProject();
     }
-  }, [projectId]); // Re-fetch เมื่อ projectId เปลี่ยนแปลง
+  }, [id]); // Updated dependency
 
-  if (loading) return <div>กำลังโหลดข้อมูล...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <div className="loader">กำลังโหลดข้อมูล...</div>;
+  if (error) return <div className="error-message">{error}</div>;
   if (!project) return <div>ไม่พบข้อมูลโครงการ</div>;
 
   return (
-    <div className="project-detail-container">
+    <div className='Body'>
       <Navbar />
-      <div className='header-div'>
-        <div className="header">รายละเอียดโครงการ</div>
-        <BackButton/>
-      </div>
-      <div className="project-section">
-        <h3>ชื่อโครงการ</h3>
-        <div className="project-info">
-          <div>ชื่อบริษัท: {project.owner}</div>
-          <div>ชื่อบริษัทย่อย: {project.name}</div>
+      <div className='pd-containner'>
+        <div className='head-title' style={{ width: '66rem' }}>
+          <h4>รายระเอียดโครงการ</h4>
+          <BackButton />
         </div>
-      </div>
-      {/* <div className='info-box'>
-        <h3 className='section-title'>ชื่อโครงการ</h3>
-        <div className='project-details'>
-          <div className="project-column">
-            <div className="detail-title">ชื่อบริษัท:</div>
-            <div className="detail-content">{project.owner}</div>
+        <div className='inner-content'>
+          <div className='Body-detail'>
+            <div className='pd-info'>
+              <h5>ชื่อโครงการ</h5>
+              <hr />
+              <div className='pd-top'>
+                <div className='pd-row'>
+                  <h5>ชื่อบริษัท:</h5>
+                  <p>{project.owner}</p>
+                </div>
+                <div className='pd-row'>
+                  <h5>ชื่อบริษัทย่อย:</h5>
+                  <p>{project.name}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className='pd-info'>
+              <h5>รายระเอียด</h5>
+              <hr />
+              <div className='pd-top'>
+                <div className='pd-row'>
+                  <h5>ประเภทโครงการ:</h5>
+                  <p>{project.type}</p>
+                </div>
+                <div className='pd-row'>
+                  <h5>ช่วงราคา(บาท):</h5>
+                  <p>{project.minPrice}-{project.maxPrice}</p>
+                </div>
+                <div className='pd-row'>
+                  <h5>จำนวน(ยูนิต):</h5>
+                  <p>{project.amount}</p>
+                </div>
+                <div className='pd-row'>
+                  <h5>ขายแล้ว(ยูนิต):</h5>
+                  <p>{project.deal}</p>
+                </div>
+                <div className='pd-row'>
+                  <h5>ความคืบหน้า:</h5>
+                  <p>{project.progress}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className='pd-info'>
+              <h5>การติดต่อ</h5>
+              <hr />
+              <div className='pd-top'>
+                <div className='pd-row'>
+                  <h5>ชื่อพนักงานขาย:</h5>
+                  <p>{project.saleName}</p>
+                </div>
+                <div className='pd-row'>
+                  <h5>เบอร์มือถือ:</h5>
+                  <p>{project.phone}</p>
+                </div>
+                <div className='pd-row'>
+                  <h5>เขต:</h5>
+                  <p>{project.area?.area}</p>
+                </div>
+                <div className='pd-row'>
+                  <h5>จังหวัด:</h5>
+                  <p>{project.area?.province}</p>
+                </div>
+                <div className='pd-row'>
+                  <h5>ภูมิภาค:</h5>
+                  <p>{project.area?.region}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className='footer-detail'>
+              <div className='right-pd'>
+                <h5>ดูแลโดย</h5>
+                <hr />
+                <div className='pd-top'>
+                  <div className='pd-row'>
+                    <h5>ชื่อ:</h5>
+                    <p>{project.officer?.firstName} {project.officer?.lastName}</p>
+                  </div>
+                  <div className='pd-row'>
+                    <h5>ตำแหน่ง:</h5>
+                    <p>{project.officer?.access?.access_name}</p>
+                  </div>
+                </div>
+              </div>
+              <div className='right-pd'>
+                <h5>สร้างโดย</h5>
+                <hr />
+                <div className='pd-top'>
+                  <div className='pd-row'>
+                    <h5>ชื่อ:</h5>
+                    <p>วรภพ ศรีแจ่ม</p>
+                  </div>
+                  <div className='pd-row'>
+                    <h5>ตำแหน่ง:</h5>
+                    <p>แอดมิน</p>
+                  </div>
+                  <div className='pd-row'>
+                    <h5>วันที่:</h5>
+                    <p>11/09/2024</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="project-column">
-            <div className="detail-title">ชื่อบริษัทย่อย:</div>
-            <div className="detail-content">{project.name}</div>
-          </div>
+
         </div>
       </div>
-
-      <div className='info-box'>
-        <h3 className='section-title'>การติดต่อ</h3>
-        <div className="contact-details">
-          <p><span>ชื่อพนักงานขาย:</span> {project.saleName}</p>
-          <p><span>เบอร์มือถือ:</span> {project.phone}</p>
-          <p><span>เขต:</span> {project.area?.area || '-'}</p>
-          <p><span>จังหวัด:</span> {project.area?.province || '-'}</p>
-          <p><span>ภูมิภาค:</span> {project.area?.region || '-'}</p>
-        </div>
-      </div>
-
-      <div className='info-box'>
-        <h3 className='section-title'>รายละเอียด</h3>
-        <p><span>ประเภทโครงการ:</span> {project.type}</p>
-        <p><span>ช่วงราคา (บาท):</span> {project.minPrice}-{project.maxPrice}</p>
-        <p><span>จำนวน (ยูนิต):</span> {project.amount}</p>
-        <p><span>สถานะเปิดขาย (ยูนิต):</span> {project.deal}</p>
-        <p><span>ความคืบหน้า:</span> {project.progress}%</p>
-      </div>
-
-      <div className='info-box'>
-        <h3 className='section-title'>ดูแลโดย</h3>
-        <p><span>ชื่อ:</span> {project.consultantName}</p>
-        <p><span>ตำแหน่ง:</span> {project.consultantPosition}</p>
-      </div>
-
-      <div className='info-box'>
-        <h3 className='section-title'>สร้างโดย</h3>
-        <p><span>ชื่อ:</span> {project.creatorName}</p>
-        <p><span>ตำแหน่ง:</span> {project.creatorPosition}</p>
-        <p><span>วันที่:</span> {new Date(project.createdAt).toLocaleString()}</p>
-      </div>
-
-      <button className="save-btn">บันทึกข้อมูล</button>  */}
     </div>
   );
 };

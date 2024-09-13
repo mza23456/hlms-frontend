@@ -51,6 +51,10 @@
                 align-items: center;
                 justify-content: space-between;
                 margin-bottom: 1rem;
+                & h5{
+                    color: #005EC7;
+
+                }
             }
 
             & .body {
@@ -60,11 +64,16 @@
 
                 & .box {
                     width: 18rem;
+                    & h5{
+                        color: rgba(0, 45, 99, 1);
+                    }
+                    & p {
+                        font-size: large;
+                        color: rgb(128, 128, 128);
+                    }
                 }
 
-                & p {
-                    font-size: large;
-                }
+                
             }
         }
 
@@ -77,18 +86,23 @@
                 padding: 2rem 1rem;
                 border-radius: 25px;
                 box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.228);
+                & h5{
+                    color: #005EC7;
+
+                }
 
                 /* สำคัญ */
                 & .row {
                     display: flex;
-
                     & h5 {
                         width: 9rem;
+                        color: rgba(0, 45, 99, 1);
                     }
 
                     & p {
                         width: 15rem;
                         font-size: large;
+                        color: rgb(128, 128, 128);
                     }
                 }
 
@@ -104,6 +118,10 @@
                     padding: 2rem 1rem;
                     border-radius: 25px;
                     box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.228);
+                    & h5{
+                        color: #005EC7;
+                        
+                    }
 
                     /* สำคัญ */
                     & .row {
@@ -112,11 +130,15 @@
 
                         & h5 {
                             width: 8rem;
+                        color: rgba(0, 45, 99, 1);
+                            
+                            
                         }
 
                         & p {
                             width: 11rem;
                             font-size: large;
+                            color: rgb(128, 128, 128);
 
                         }
                     }
@@ -126,7 +148,9 @@
                     padding: 2rem 1rem;
                     border-radius: 25px;
                     box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.228);
-
+                    & h5{
+                        color: #005EC7;
+                    }
                     /* สำคัญ */
                     & .row {
                         display: flex;
@@ -134,11 +158,14 @@
 
                         & h5 {
                             width: 8rem;
+                        color: rgba(0, 45, 99, 1);
+
                         }
 
                         & p {
                             width: 11rem;
                             font-size: large;
+                            color: rgb(128, 128, 128);
                         }
                     }
                 }
@@ -147,119 +174,148 @@
     }
 }
 
-@media(max-width:565px) {
-    .inner-content {
-        & .head {
-            /* background-color: aquamarine; */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+@media(max-width:450px) {
+    
+.head-title {
+    width: 100%;
+}
 
-            & .user-img {
-                width: 180px;
-                height: 180px;
+.inner-content {
+    background-color: white;
+    max-width: 66rem;
+    height: auto;
+    padding: .5rem;
+    border-radius: 25px;
+
+    & .head {
+        align-items: center;
+        & .user-img {
+            
+        }
+    }
+
+    & .Body-detail {
+        & .user-info {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            & .top {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
                 margin-bottom: 1rem;
-                border-radius: 100px;
+                & h5{
+                    color: #005EC7;
+
+                }
+            }
+
+            & .body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
             }
         }
 
-        & .Body-detail {
-            & .user-info {
-                & .top {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    margin-bottom: 1rem;
+        & .footer-detail {
+            display: flex;
+            flex-direction: column;
+
+            & .left-detail {
+                width: 100%;
+                padding: 1rem;
+                margin-bottom: 1rem;
+
+                & h5{
+                    color: #005EC7;
+
                 }
 
-                & .body {
+                /* สำคัญ */
+                & .row {
                     display: flex;
-                    flex-direction: column;
-                    height: 16rem;
-                    justify-content: start;
-                    padding: 0 0 0 3rem;
+                    width: 100%;
+                    padding-left: 2rem;
 
-                    & .box {
-                        width: 23rem;
+                    & h5 {
+                        width: 30%;
+                        color: rgba(0, 45, 99, 1);
+                    }
+
+                    & p {
+                        width: 70%;
+                        font-size: large;
+                        color: rgb(128, 128, 128);
                     }
                 }
+
             }
 
-            & .footer-detail {
+            & .right-detail {
+                width: 100%;
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
+                gap: 1rem;
 
-                & .left-detail {
-                    width: 27.5rem;
-                    padding: 2rem 1rem;
+                & .top-r {
+                    padding: 1rem;
                     border-radius: 25px;
                     box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.228);
+                    & h5{
+                        color: #005EC7;
+                        
+                    }
 
                     /* สำคัญ */
                     & .row {
                         display: flex;
-                        background-color: aquamarine;
-                        margin-left: 2rem;
-
+                        width: 100%;
+                        padding-left: 2rem;
                         & h5 {
-                            width: 9rem;
+                            width: 8rem;
+                        color: rgba(0, 45, 99, 1);
+                            
+                            
                         }
 
-                        & h6 {
-                            width: 10rem;
+                        & p {
+                            width: 11rem;
+                            font-size: large;
+                            color: rgb(128, 128, 128);
+
                         }
                     }
-
                 }
 
-                & .right-detail {
-                    width: 27.5rem;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1rem;
-
-                    & .top-r {
-                        padding: 2rem 1rem;
-                        border-radius: 25px;
-                        box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.228);
-
-                        /* สำคัญ */
-                        & .row {
-                            display: flex;
-                            width: 100%;
-
-                            & h5 {
-                                width: 8rem;
-                            }
-
-                            & h6 {
-                                width: 3rem;
-                            }
-                        }
+                & .bottom-r {
+                    padding: 2rem 1rem;
+                    border-radius: 25px;
+                    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.228);
+                    & h5{
+                        color: #005EC7;
                     }
+                    /* สำคัญ */
+                    & .row {
+                        display: flex;
+                        width: 100%;
+                        padding-left: 2rem;
 
-                    & .bottom-r {
-                        padding: 2rem 1rem;
-                        border-radius: 25px;
-                        box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.228);
+                        & h5 {
+                            width: 8rem;
+                        color: rgba(0, 45, 99, 1);
 
-                        /* สำคัญ */
-                        & .row {
-                            display: flex;
-                            width: 100%;
+                        }
 
-                            & h5 {
-                                width: 8rem;
-                            }
-
-                            & h6 {
-                                width: 3rem;
-                            }
+                        & p {
+                            width: 11rem;
+                            font-size: large;
+                            color: rgb(128, 128, 128);
                         }
                     }
                 }
             }
         }
     }
+}
+
 }
